@@ -33,7 +33,6 @@ window.__require = function e(t, n, r) {
     });
     var HashMap_1 = require("../utils/HashMap");
     var EventManager_1 = require("./EventManager");
-    var EventName_1 = require("./EventName");
     var AudioController = function() {
       function AudioController() {
         this.audioID = {};
@@ -61,124 +60,7 @@ window.__require = function e(t, n, r) {
         });
       };
       AudioController.prototype.initEvent = function() {
-        var _this = this;
         EventManager_1.gEventMgr.targetOff(this);
-        this.audioID["bgm"] = this.play("normal_bgm", true, 1.5, true);
-        console.log("this.audioID bgm = ", null === this.audioID["bgm"]);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_KILL_EFFECT, function() {
-          _this.audioID["fruit_break"] = _this.play("fruit_break", false, 2.5);
-          cc.audioEngine.setFinishCallback(_this.audioID["fruit_break"], function() {
-            this.audioID["fruit_break"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_30_BGM, function() {
-          null != _this.audioID["bgm"] && _this.stop(_this.audioID["bgm"]);
-          _this.audioID["time_counting"] = _this.play("time_counting", true, 3);
-          _this.audioID["bgm"] = _this.play("bgm_30secs", true, 1.5, true);
-          null == _this.audioID["specialA_bgm"] && null == _this.audioID["specialB_bgm"] || cc.audioEngine.pause(_this.audioID["bgm"]);
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.GAME_RESTART, function() {
-          null != _this.audioID["bgm"] && _this.stop(_this.audioID["bgm"]);
-          null != _this.audioID["time_counting"] && _this.stop(_this.audioID["time_counting"]);
-          _this.audioID["bgm"] = _this.play("normal_bgm", true, 1.5, true);
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_BIU, function() {
-          _this.audioID["biu"] = _this.play("biu", false, .5);
-          cc.audioEngine.setFinishCallback(_this.audioID["biu"], function() {
-            this.audioID["biu"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_TOUCH, function() {
-          _this.audioID["touch"] = _this.play("touch");
-          cc.audioEngine.setFinishCallback(_this.audioID["touch"], function() {
-            this.audioID["touch"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_PLACE, function() {
-          _this.audioID["lay"] = _this.play("lay");
-          cc.audioEngine.setFinishCallback(_this.audioID["lay"], function() {
-            this.audioID["lay"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_SPECIAL_A_BGM, function(play) {
-          console.log(" SpecialA_bgm:", play);
-          if (play) {
-            null != _this.audioID["bgm"] && cc.audioEngine.pause(_this.audioID["bgm"]);
-            _this.audioID["SpecialA_bgm"] = _this.play("SpecialA_bgm", true);
-          } else {
-            null != _this.audioID["bgm"] && cc.audioEngine.resume(_this.audioID["bgm"]);
-            if (null != _this.audioID["SpecialA_bgm"]) {
-              cc.audioEngine.stop(_this.audioID["SpecialA_bgm"]);
-              _this.audioID["SpecialA_bgm"] = null;
-            }
-          }
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_SPECIAL_B_BGM, function(play) {
-          console.log(" SpecialB_bgm:", play);
-          if (play) {
-            null != _this.audioID["bgm"] && cc.audioEngine.pause(_this.audioID["bgm"]);
-            _this.audioID["SpecialB_bgm"] = _this.play("SpecialB_bgm", true);
-          } else {
-            null != _this.audioID["bgm"] && cc.audioEngine.resume(_this.audioID["bgm"]);
-            if (null != _this.audioID["SpecialB_bgm"]) {
-              cc.audioEngine.stop(_this.audioID["SpecialB_bgm"]);
-              _this.audioID["SpecialB_bgm"] = null;
-            }
-          }
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_OVER, function() {
-          null != _this.audioID["time_counting"] && _this.stop(_this.audioID["time_counting"]);
-          _this.audioID["over"] = _this.play("over");
-          cc.audioEngine.setFinishCallback(_this.audioID["over"], function() {
-            this.audioID["over"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_OVER_NO_PLACE, function() {
-          null != _this.audioID["bgm"] && _this.stop(_this.audioID["bgm"]);
-          _this.audioID["over_no_place"] = _this.play("over_no_place");
-          cc.audioEngine.setFinishCallback(_this.audioID["over_no_place"], function() {
-            this.audioID["over_no_place"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_LAY_FAIL, function() {
-          _this.audioID["lay_fail"] = _this.play("lay_fail");
-          cc.audioEngine.setFinishCallback(_this.audioID["lay_fail"], function() {
-            this.audioID["lay_fail"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_OVER_TIME_UP, function() {
-          null != _this.audioID["bgm"] && _this.stop(_this.audioID["bgm"]);
-          _this.audioID["frezon"] = _this.play("frezon");
-          cc.audioEngine.setFinishCallback(_this.audioID["frezon"], function() {
-            this.audioID["frezon"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_OVER_TAB, function() {
-          _this.audioID["over_biu"] = _this.play("over_biu");
-          cc.audioEngine.setFinishCallback(_this.audioID["over_biu"], function() {
-            this.audioID["over_biu"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_SCORE, function(isPlay) {
-          if (isPlay) _this.audioID["score"] = _this.play("score", true, 1); else if (null != _this.audioID["score"]) {
-            _this.stop(_this.audioID["score"]);
-            _this.audioID["score"] = null;
-          }
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_SPECIAL_A, function() {
-          console.log(" specialA -----------------------------", _this.audioID["specialA"]);
-          _this.audioID["specialA"] = _this.play("specialA", false, 1.5);
-          cc.audioEngine.setFinishCallback(_this.audioID["specialA"], function() {
-            this.audioID["specialA"] = null;
-          }.bind(_this));
-        }, this);
-        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.PLAY_SPECIAL_B, function() {
-          console.log(" specialB -----------------------------", _this.audioID["specialB"]);
-          _this.audioID["specialB"] = _this.play("specialB", false, 1.5);
-          cc.audioEngine.setFinishCallback(_this.audioID["specialB"], function() {
-            this.audioID["specialB"] = null;
-          }.bind(_this));
-        }, this);
       };
       AudioController.prototype.stop = function(audioID, clipName) {
         if (AudioController.canPlay) cc.audioEngine.stop(audioID); else for (var _i = 0, _a = AudioController.PlayedList; _i < _a.length; _i++) {
@@ -244,8 +126,7 @@ window.__require = function e(t, n, r) {
     cc._RF.pop();
   }, {
     "../utils/HashMap": "HashMap",
-    "./EventManager": "EventManager",
-    "./EventName": "EventName"
+    "./EventManager": "EventManager"
   } ],
   EventManager: [ function(require, module, exports) {
     "use strict";
@@ -484,6 +365,7 @@ window.__require = function e(t, n, r) {
     var GameFactory_1 = require("./controller/GameFactory");
     var Game_1 = require("./controller/Game");
     var Poker_1 = require("./Poker");
+    var Pokers_1 = require("./Pokers");
     var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
     var celerx = require("./utils/celerx");
     var LOAD_STEP;
@@ -505,12 +387,16 @@ window.__require = function e(t, n, r) {
         _this.PokerDevl = null;
         _this.RemoveNode = null;
         _this.BackButton = null;
+        _this.CycleRoot = null;
+        _this.PokerFlipRoot = null;
         _this.step = LOAD_STEP.READY;
         _this.canDispatchPoker = false;
-        _this.dispatchCardCount = 38;
+        _this.dispatchCardCount = 28;
+        _this.devTime = 10;
         return _this;
       }
       GameScene.prototype.onLoad = function() {
+        var _this = this;
         Game_1.Game.removeNode = this.RemoveNode;
         celerx.ready();
         CMath.randomSeed = Math.random();
@@ -526,8 +412,20 @@ window.__require = function e(t, n, r) {
           var child = _a[_i];
           Game_1.Game.placePokerRoot.add(parseInt(child.name), child);
         }
+        for (var _b = 0, _c = this.CycleRoot.children; _b < _c.length; _b++) {
+          var child = _c[_b];
+          Game_1.Game.cyclePokerRoot.add(parseInt(child.name), child);
+        }
         this.nextStep(LOAD_STEP.GUIDE);
         this.PokerClip.on(cc.Node.EventType.TOUCH_START, this.dispatchPoker, this);
+        this.PokerFlipRoot.on(cc.Node.EventType.CHILD_ADDED, this.onPokerFlipAddChild, this);
+        this.PokerFlipRoot.on(cc.Node.EventType.CHILD_REMOVED, this.onPokerFlipRemoveChild, this);
+        this.PokerDevl.on(cc.Node.EventType.TOUCH_START, function() {
+          if (_this.devTime >= .3) {
+            _this.devPoker();
+            _this.devTime = 0;
+          }
+        }, this);
         this.BackButton.node.on(cc.Node.EventType.TOUCH_START, Game_1.Game.backStep, Game_1.Game);
       };
       GameScene.prototype.celerStart = function() {
@@ -546,16 +444,14 @@ window.__require = function e(t, n, r) {
       };
       GameScene.prototype.startGame = function() {
         var _this = this;
-        for (var j = 0; j < 6; j++) {
-          var pokerNum = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ];
-          while (pokerNum.length > 0) {
-            var i = pokerNum.splice(Math.floor(CMath.getRandom() * pokerNum.length), 1);
-            var pokerNode = GameFactory_1.gFactory.getPoker(i);
-            pokerNode.name = this.PokerDevl.childrenCount.toString();
-            pokerNode.x = 0;
-            pokerNode.y = .3 * -this.PokerDevl.childrenCount;
-            this.PokerDevl.addChild(pokerNode);
-          }
+        var pokers = Pokers_1.Pokers.concat();
+        while (pokers.length > 0) {
+          var i = pokers.splice(Math.floor(CMath.getRandom() * pokers.length), 1);
+          var pokerNode = GameFactory_1.gFactory.getPoker(i);
+          pokerNode.name = this.PokerDevl.childrenCount.toString();
+          pokerNode.x = 0;
+          pokerNode.y = .3 * -this.PokerDevl.childrenCount;
+          this.PokerDevl.addChild(pokerNode);
         }
         var count = 0;
         var totalCount = this.PokerDevl.childrenCount;
@@ -569,7 +465,7 @@ window.__require = function e(t, n, r) {
           var targetPos = cc.v2(0, 0);
           if (_this.PokerClip.childrenCount > 0) {
             var child = _this.PokerClip.children[_this.PokerClip.childrenCount - 1];
-            targetPos = cc.v2(child.x - 20, child.y);
+            targetPos = cc.v2(child.x, child.y);
           }
           var selfPos = _this.PokerClip.convertToNodeSpaceAR(pokerNode.parent.parent.convertToWorldSpaceAR(pokerNode.position));
           var poker_1 = pokerNode.getComponent(Poker_1.default);
@@ -582,29 +478,30 @@ window.__require = function e(t, n, r) {
             func2();
           }, _this)));
         };
+        var pokerPos = [ 0, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6 ];
+        var pokerFlips = [ 0, 2, 5, 9, 14, 20, 27 ];
         var func1 = function() {
-          if (count >= _this.dispatchCardCount) {
-            func2();
+          if (count++ >= _this.dispatchCardCount) {
+            _this.canDispatchPoker = true;
             return;
           }
-          var pos = count++ % 8;
           var pokerNode = _this.PokerDevl.getChildByName((totalCount - count).toString());
-          var targetNode = Game_1.Game.placePokerRoot.get(pos);
+          var targetNode = Game_1.Game.placePokerRoot.get(pokerPos[count - 1]);
           if (targetNode) {
             var selfPos = targetNode.convertToNodeSpaceAR(pokerNode.parent.convertToWorldSpaceAR(pokerNode.position));
             var offset = -15;
             if (!targetNode.getComponent(Poker_1.default)) {
-              Game_1.Game.placePokerRoot.add(pos, pokerNode);
+              Game_1.Game.placePokerRoot.add(pokerPos[count - 1], pokerNode);
               offset = 0;
             }
             pokerNode.setParent(targetNode);
             var poker_2 = pokerNode.getComponent(Poker_1.default);
             pokerNode.setPosition(selfPos);
-            if (count > _this.dispatchCardCount - 8) {
+            pokerNode.group = "top";
+            if (pokerFlips.indexOf(count - 1) >= 0) {
               poker_2.flipCard(.1);
               poker_2.setNormal();
             }
-            pokerNode.group = "top";
             pokerNode.runAction(cc.sequence(cc.moveTo(.1, 0, offset), cc.callFunc(function() {
               pokerNode.group = "default";
               poker_2.setDefaultPosition();
@@ -614,7 +511,159 @@ window.__require = function e(t, n, r) {
         };
         func1();
       };
-      GameScene.prototype.onPokerClipAddChild = function() {};
+      GameScene.prototype.recyclePoker = function() {
+        var _this = this;
+        if (this.PokerDevl.childrenCount > 0) return;
+        if (this.PokerFlipRoot.childrenCount <= 0) return;
+        var nodes = [];
+        var parents = [];
+        var poses = [];
+        var children = this.PokerFlipRoot.children.concat().reverse();
+        var i = 0;
+        var _loop_1 = function(child) {
+          var selfPos = this_1.PokerDevl.convertToNodeSpaceAR(child.parent.convertToWorldSpaceAR(child.position));
+          var poker = child.getComponent(Poker_1.default);
+          nodes.push(child);
+          parents.push(this_1.PokerFlipRoot);
+          poses.push(child.position.clone());
+          child.setParent(this_1.PokerDevl);
+          child.setPosition(selfPos);
+          poker.setDefaultPosition(cc.v2(0, 0));
+          poker.flipCard(.1, false);
+          child.group = "top";
+          this_1.scheduleOnce(function() {
+            var action = cc.sequence(cc.delayTime(i / 100), cc.moveTo(.1, 0, 0), cc.callFunc(function() {
+              child.group = "default";
+            }, _this));
+            action.setTag(Pokers_1.ACTION_TAG.RE_DEV_POKER);
+            child.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS);
+            child.runAction(action);
+          }, 0);
+          i++;
+        };
+        var this_1 = this;
+        for (var _i = 0, children_1 = children; _i < children_1.length; _i++) {
+          var child = children_1[_i];
+          _loop_1(child);
+        }
+        Game_1.Game.addStep(nodes, parents, poses);
+      };
+      GameScene.prototype.devPoker = function() {
+        var _this = this;
+        console.log(" devPoker ");
+        if (!this.canDispatchPoker) return;
+        if (this.PokerDevl.childrenCount <= 0) {
+          this.recyclePoker();
+          return;
+        }
+        var nodes = [];
+        var parents = [];
+        var poses = [];
+        var funcs = [];
+        var oldChildren = this.PokerFlipRoot.children.concat();
+        var _loop_2 = function(i) {
+          var pokerNode = this_2.PokerDevl.children[this_2.PokerDevl.childrenCount - 1];
+          var selfPos = this_2.PokerFlipRoot.convertToNodeSpaceAR(pokerNode.parent.convertToWorldSpaceAR(pokerNode.position));
+          var poker = pokerNode.getComponent(Poker_1.default);
+          nodes.push(pokerNode);
+          parents.push(pokerNode.getParent());
+          poses.push(pokerNode.position.clone());
+          funcs.push({
+            callback: poker.flipCard,
+            args: [ .1 ],
+            target: poker
+          });
+          pokerNode.setParent(this_2.PokerFlipRoot);
+          pokerNode.setPosition(selfPos);
+          var offset = 30 * i;
+          poker.setDefaultPosition(cc.v2(offset, 0));
+          pokerNode.group = "top";
+          this_2.scheduleOnce(function() {
+            poker.setFlipPos(cc.v2(offset, 0));
+            var action = cc.sequence(cc.delayTime(i / 20), cc.moveTo(.1, offset, 0), cc.callFunc(function() {
+              pokerNode.group = "default";
+            }, _this));
+            action.setTag(Pokers_1.ACTION_TAG.DEV_POKER);
+            pokerNode.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+            pokerNode.runAction(action);
+          }, .05);
+        };
+        var this_2 = this;
+        for (var i = 0; i < 3; i++) _loop_2(i);
+        for (var _i = 0, oldChildren_1 = oldChildren; _i < oldChildren_1.length; _i++) {
+          var child = oldChildren_1[_i];
+          child.x = 0;
+          if (child.getNumberOfRunningActions() > 0) {
+            child.group = "default";
+            child.stopAllActions();
+          }
+        }
+        Game_1.Game.addStep(nodes, parents, poses, funcs);
+      };
+      GameScene.prototype.onPokerFlipAddChild = function(child) {
+        var _this = this;
+        console.log(" onPokerFlipAddChild:", this.PokerFlipRoot.childrenCount);
+        var childIndex = this.PokerFlipRoot.children.indexOf(child);
+        var poker = child.getComponent(Poker_1.default);
+        poker && (poker.isNormal() || poker.flipCard(.1, false, function() {
+          poker.setCanMove(childIndex + 1 == _this.PokerFlipRoot.childrenCount);
+        }));
+        childIndex >= 1 && this.PokerFlipRoot.children[childIndex - 1].getComponent(Poker_1.default).setCanMove(false);
+        this.updateFlipPokerPosOnAdd();
+      };
+      GameScene.prototype.onPokerFlipRemoveChild = function() {
+        this.PokerFlipRoot.childrenCount > 0 && this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 1].getComponent(Poker_1.default).setNormal();
+        this.updateFlipPokerPos();
+      };
+      GameScene.prototype.updateFlipPokerPosOnAdd = function() {
+        if (this.PokerFlipRoot.childrenCount >= 3) {
+          var child2 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 2];
+          var action2 = cc.moveTo(.1, 30, 0);
+          action2.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+          child2.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+          child2.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          child2.runAction(action2);
+          child2.getComponent(Poker_1.default).setFlipPos(cc.v2(30, 0));
+          child2.getComponent(Poker_1.default).setDefaultPosition(cc.v2(0, 0));
+          child2.group = "default";
+          child2.stopActionByTag(Pokers_1.ACTION_TAG.BACK_STEP);
+          var child3 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 3];
+          var action3 = cc.moveTo(.1, 0, 0);
+          action3.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+          child3.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+          child3.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          child3.runAction(action3);
+          child3.getComponent(Poker_1.default).setFlipPos(cc.v2(0, 0));
+          child3.getComponent(Poker_1.default).setDefaultPosition(cc.v2(0, 0));
+          child3.group = "default";
+          child3.stopActionByTag(Pokers_1.ACTION_TAG.BACK_STEP);
+        }
+      };
+      GameScene.prototype.updateFlipPokerPos = function() {
+        if (this.PokerFlipRoot.childrenCount >= 3) {
+          var child1 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 1];
+          var action1 = cc.moveTo(.1, 60, 0);
+          action1.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          child1.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          child1.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+          child1.runAction(action1);
+          child1.getComponent(Poker_1.default).setFlipPos(cc.v2(60, 0));
+          var child2 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 2];
+          var action2 = cc.moveTo(.1, 30, 0);
+          action2.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          child2.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          child2.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+          child2.runAction(action2);
+          child2.getComponent(Poker_1.default).setFlipPos(cc.v2(30, 0));
+          var child3 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 3];
+          var action3 = cc.moveTo(.1, 0, 0);
+          action3.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          child3.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          child3.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+          child3.runAction(action3);
+          child3.getComponent(Poker_1.default).setFlipPos(cc.v2(0, 0));
+        }
+      };
       GameScene.prototype.dispatchPoker = function() {
         var _this = this;
         if (this.PokerClip.childrenCount <= 0 || !this.canDispatchPoker) return;
@@ -653,12 +702,17 @@ window.__require = function e(t, n, r) {
         Game_1.Game.addStep(nodes, parents, poses, funcs);
       };
       GameScene.prototype.start = function() {};
+      GameScene.prototype.update = function(dt) {
+        this.devTime += dt;
+      };
       __decorate([ property(cc.Prefab) ], GameScene.prototype, "Poker", void 0);
       __decorate([ property(cc.Node) ], GameScene.prototype, "PokerClip", void 0);
       __decorate([ property(cc.Node) ], GameScene.prototype, "PlaceRoot", void 0);
       __decorate([ property(cc.Node) ], GameScene.prototype, "PokerDevl", void 0);
       __decorate([ property(cc.Node) ], GameScene.prototype, "RemoveNode", void 0);
       __decorate([ property(cc.Button) ], GameScene.prototype, "BackButton", void 0);
+      __decorate([ property(cc.Node) ], GameScene.prototype, "CycleRoot", void 0);
+      __decorate([ property(cc.Node) ], GameScene.prototype, "PokerFlipRoot", void 0);
       GameScene = __decorate([ ccclass ], GameScene);
       return GameScene;
     }(cc.Component);
@@ -666,6 +720,7 @@ window.__require = function e(t, n, r) {
     cc._RF.pop();
   }, {
     "./Poker": "Poker",
+    "./Pokers": "Pokers",
     "./controller/Game": "Game",
     "./controller/GameFactory": "GameFactory",
     "./utils/celerx": "celerx"
@@ -678,9 +733,11 @@ window.__require = function e(t, n, r) {
     });
     var HashMap_1 = require("../utils/HashMap");
     var Poker_1 = require("../Poker");
+    var Pokers_1 = require("../Pokers");
     var GameMgr = function() {
       function GameMgr() {
         this.placePokerRoot = new HashMap_1.HashMap();
+        this.cyclePokerRoot = new HashMap_1.HashMap();
         this.stepInfoArray = [];
       }
       GameMgr.prototype.GameMgr = function() {};
@@ -708,25 +765,38 @@ window.__require = function e(t, n, r) {
           return;
         }
         var step = this.stepInfoArray.pop();
+        var count = 0;
         var _loop_1 = function() {
+          count++;
           var node = step.node.pop();
           var parent = step.lastParent.pop();
           var pos = step.lastPos.pop();
           var func = step.func ? step.func.pop() : null;
-          if ("PokerClip" == parent.name) {
+          if ("PokerClip" == parent.name || "PokerFlipRoot" == parent.name) {
             var selfPos = parent.convertToNodeSpaceAR(node.getParent().convertToWorldSpaceAR(node.position));
             node.setPosition(selfPos);
           } else node.setPosition(pos);
           node.setParent(parent);
           node.group = "top";
-          func && func.callback && func.target && func.callback.apply(func.target, func.args);
+          if (func && func.callback && func.target) {
+            console.log("call func !");
+            func.callback.apply(func.target, func.args);
+          }
           var poker = node.getComponent(Poker_1.default);
           if (poker) {
-            var returnPos = "PokerClip" == parent.name ? poker.getLastPosition() : poker.getDefaultPosition();
-            parent.getComponent(Poker_1.default) ? (parent.getComponent(Poker_1.default).getForward() && parent.getComponent(Poker_1.default).getForward().getCardState() == Poker_1.CardState.Back || !parent.getComponent(Poker_1.default).getForward() || parent.getComponent(Poker_1.default).getCardState() == Poker_1.CardState.Back) && (returnPos.y = -15) : returnPos.y = 0;
-            poker.node.runAction(cc.sequence(cc.moveTo(.1, returnPos.x, returnPos.y), cc.callFunc(function() {
+            var returnPos = "PokerClip" == parent.name ? poker.getLastPosition() : "PokerFlipRoot" == parent.name ? poker.getFlipPos() : poker.getDefaultPosition();
+            if (parent.getComponent(Poker_1.default)) (parent.getComponent(Poker_1.default).getForward() && parent.getComponent(Poker_1.default).getForward().getCardState() == Poker_1.CardState.Back || !parent.getComponent(Poker_1.default).getForward() || parent.getComponent(Poker_1.default).getCardState() == Poker_1.CardState.Back) && (returnPos.y = -15); else if ("PokerFlipRoot" != parent.name) {
+              returnPos.x = 0;
+              returnPos.y = 0;
+            }
+            var action = cc.sequence(cc.delayTime(count / 500), cc.callFunc(function() {
+              poker.node.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+            }, this_1), cc.moveTo(.1, returnPos.x, returnPos.y), cc.callFunc(function() {
               node.group = "default";
-            }, this_1)));
+              poker.setDefaultPosition();
+            }, this_1));
+            action.setTag(Pokers_1.ACTION_TAG.BACK_STEP);
+            poker.node.runAction(action);
           }
         };
         var this_1 = this;
@@ -739,6 +809,7 @@ window.__require = function e(t, n, r) {
     cc._RF.pop();
   }, {
     "../Poker": "Poker",
+    "../Pokers": "Pokers",
     "../utils/HashMap": "HashMap"
   } ],
   HashMap: [ function(require, module, exports) {
@@ -897,6 +968,23 @@ window.__require = function e(t, n, r) {
     "./Poker": "Poker",
     "./controller/Game": "Game"
   } ],
+  Pokers: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "d504dBfU4JI0K2nPtJ3w844", "Pokers");
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.Pokers = [ "spade_,1", "spade_,2", "spade_,3", "spade_,4", "spade_,5", "spade_,6", "spade_,7", "spade_,8", "spade_,9", "spade_,10", "spade_,11", "spade_,12", "spade_,13", "heart_,1", "heart_,2", "heart_,3", "heart_,4", "heart_,5", "heart_,6", "heart_,7", "heart_,8", "heart_,9", "heart_,10", "heart_,11", "heart_,12", "heart_,13", "club_,1", "club_,2", "club_,3", "club_,4", "club_,5", "club_,6", "club_,7", "club_,8", "club_,9", "club_,10", "club_,11", "club_,12", "club_,13", "diamond_,1", "diamond_,2", "diamond_,3", "diamond_,4", "diamond_,5", "diamond_,6", "diamond_,7", "diamond_,8", "diamond_,9", "diamond_,10", "diamond_,11", "diamond_,12", "diamond_,13" ];
+    var ACTION_TAG;
+    (function(ACTION_TAG) {
+      ACTION_TAG[ACTION_TAG["FLIP_CARD_REPOS_ON_ADD"] = 0] = "FLIP_CARD_REPOS_ON_ADD";
+      ACTION_TAG[ACTION_TAG["FLIP_CARD_REPOS_ON_REMOVE"] = 1] = "FLIP_CARD_REPOS_ON_REMOVE";
+      ACTION_TAG[ACTION_TAG["BACK_STEP"] = 2] = "BACK_STEP";
+      ACTION_TAG[ACTION_TAG["DEV_POKER"] = 3] = "DEV_POKER";
+      ACTION_TAG[ACTION_TAG["RE_DEV_POKER"] = 4] = "RE_DEV_POKER";
+    })(ACTION_TAG = exports.ACTION_TAG || (exports.ACTION_TAG = {}));
+    cc._RF.pop();
+  }, {} ],
   Poker: [ function(require, module, exports) {
     "use strict";
     cc._RF.push(module, "19c3a5acP5K/YiwGw559yBs", "Poker");
@@ -911,6 +999,11 @@ window.__require = function e(t, n, r) {
       CardState[CardState["Front"] = 0] = "Front";
       CardState[CardState["Back"] = 1] = "Back";
     })(CardState = exports.CardState || (exports.CardState = {}));
+    var PokerColor;
+    (function(PokerColor) {
+      PokerColor[PokerColor["Red"] = 0] = "Red";
+      PokerColor[PokerColor["Black"] = 1] = "Black";
+    })(PokerColor = exports.PokerColor || (exports.PokerColor = {}));
     var Poker = function(_super) {
       __extends(Poker, _super);
       function Poker() {
@@ -927,19 +1020,27 @@ window.__require = function e(t, n, r) {
         _this.defualtChildCount = 0;
         _this.isCheck = false;
         _this.isToRemove = false;
+        _this.cycled = false;
         _this.placeLimit = 75;
         return _this;
       }
       Poker_1 = Poker;
       Poker.prototype.reuse = function() {
-        this.value = arguments[0][0][0];
-        this.frontCard.spriteFrame = this.pokerAtlas.getSpriteFrame("spade_" + this.value);
+        var pokerInfo = arguments[0][0][0];
+        this.value = parseInt(pokerInfo.split(",")[1]);
+        this.pokerColer = "spade_" == pokerInfo.split(",")[0] || "club_" == pokerInfo.split(",")[0] ? PokerColor.Black : PokerColor.Red;
+        this.frontCard.spriteFrame = this.pokerAtlas.getSpriteFrame(pokerInfo.split(",")[0] + this.value);
+        this.frontCard.spriteFrame || console.error(pokerInfo.split(",")[0] + this.value);
         this.setCardState(CardState.Back);
         this.initEvent();
         this.isToRemove = false;
       };
+      Poker.prototype.getPokerColor = function() {
+        return this.pokerColer;
+      };
       Poker.prototype.unuse = function() {
         this.node.targetOff(this);
+        this.cycled = false;
       };
       Poker.prototype.getNext = function() {
         return this.next;
@@ -992,21 +1093,34 @@ window.__require = function e(t, n, r) {
       Poker.prototype.setLastPosition = function(pos) {
         this.lastPos = pos || this.node.position.clone();
       };
+      Poker.prototype.setFlipPos = function(pos) {
+        this.flipPos = pos || this.node.position.clone();
+      };
+      Poker.prototype.getFlipPos = function() {
+        return this.flipPos ? this.flipPos.clone() : this.node.position.clone();
+      };
       Poker.prototype.getDefaultPosition = function() {
-        return this.defaultPos.clone();
+        return this.defaultPos ? this.defaultPos.clone() : this.node.position.clone();
       };
       Poker.prototype.getLastPosition = function() {
-        return this.lastPos.clone();
+        return this.lastPos ? this.lastPos.clone() : this.node.position.clone();
       };
       Poker.prototype.setKey = function(key) {
         this.key = key;
         this.node.getChildByName("Label").getComponent(cc.Label).string = key.toString();
+        "NaN" == key.toString() && (this.node.getChildByName("Label").getComponent(cc.Label).string = this.value.toString());
         this.next && this.next.setKey(key);
       };
       Poker.prototype.getKey = function() {
         return this.key;
       };
-      Poker.prototype.onTouchStart = function(e) {};
+      Poker.prototype.onTouchStart = function(e) {
+        console.log(this.value, this.frontCard.node.scaleX, this.frontCard.node.scaleY);
+        console.log(this.node.scale);
+        console.log(this.node.opacity, this.frontCard.node.opacity, this.frontCard.node.active);
+        console.log(this.frontCard.spriteFrame);
+        e.bubbles = !this.isNormal();
+      };
       Poker.prototype.onMove = function(e) {
         e.bubbles = false;
         if (!this.canMove) return;
@@ -1015,14 +1129,21 @@ window.__require = function e(t, n, r) {
         this.node.x += move.x;
         this.node.y += move.y;
       };
+      Poker.prototype.setCanMove = function(isCanMove) {
+        console.log("setCanMove:", isCanMove);
+        this.canMove = isCanMove;
+      };
       Poker.prototype.onMoveEnd = function(e) {
         var _this = this;
         e.bubbles = false;
         if (this.defaultPos && this.canMove) {
           var placeIndex = this.checkCanPlace();
-          placeIndex >= 0 ? this.placeToNewRoot(placeIndex) : this.node.runAction(cc.sequence(cc.moveTo(.1, this.defaultPos.x, this.defaultPos.y), cc.callFunc(function() {
-            _this.node.group = "default";
-          }, this)));
+          if (placeIndex >= 0) this.placeToNewRoot(placeIndex); else {
+            var recycleIndex = this.checkCanRecycled();
+            recycleIndex >= 0 ? this.placeToNewCycleNode(recycleIndex) : this.node.runAction(cc.sequence(cc.moveTo(.1, this.defaultPos.x, this.defaultPos.y), cc.callFunc(function() {
+              _this.node.group = "default";
+            }, this)));
+          }
         }
       };
       Poker.prototype.checkCanPlace = function() {
@@ -1030,8 +1151,25 @@ window.__require = function e(t, n, r) {
         var distance = this.placeLimit;
         var index = -1;
         Game_1.Game.placePokerRoot.forEach(function(key, root) {
+          if (_this.node.name == root.name) return;
           var poker = root.getComponent(Poker_1);
-          if (poker && Poker_1.checkBeNext(poker, _this) || !poker) {
+          if (poker && Poker_1.checkBeNext(poker, _this) || !poker && 13 == _this.value) {
+            var dis = CMath.Distance(_this.node.parent.convertToNodeSpaceAR(root.parent.convertToWorldSpaceAR(root.position)), _this.node.position);
+            if (dis < distance) {
+              distance = dis;
+              index = key;
+            }
+          }
+        });
+        return index;
+      };
+      Poker.prototype.checkCanRecycled = function() {
+        var _this = this;
+        var distance = this.placeLimit;
+        var index = -1;
+        Game_1.Game.cyclePokerRoot.forEach(function(key, root) {
+          var poker = root.getComponent(Poker_1);
+          if (poker && Poker_1.checkRecycled(poker, _this) || !poker && 1 == _this.value) {
             var dis = CMath.Distance(_this.node.parent.convertToNodeSpaceAR(root.parent.convertToWorldSpaceAR(root.position)), _this.node.position);
             if (dis < distance) {
               distance = dis;
@@ -1042,6 +1180,7 @@ window.__require = function e(t, n, r) {
         return index;
       };
       Poker.prototype.updateRootNode = function(index) {
+        console.log("this.node.childrenCount\uff1a", this.node.childrenCount, "name:", this.node.name, "key:", this.key, "value:", this.value);
         if (this.node.childrenCount <= this.defualtChildCount) {
           Game_1.Game.placePokerRoot.add(index, this.node);
           this.check(1);
@@ -1063,6 +1202,20 @@ window.__require = function e(t, n, r) {
         this.node.setPosition(selfPos);
         var offset = 0;
         root.getComponent(Poker_1) && (offset = -30);
+        this.node.runAction(cc.sequence(cc.moveTo(.1, 0, offset), cc.callFunc(function() {
+          _this.setDefaultPosition();
+          _this.node.group = "default";
+        }, this)));
+      };
+      Poker.prototype.placeToNewCycleNode = function(index) {
+        var _this = this;
+        this.cycled = true;
+        var root = Game_1.Game.cyclePokerRoot.get(index);
+        var selfPos = root.convertToNodeSpaceAR(this.node.parent.convertToWorldSpaceAR(this.node.position));
+        Game_1.Game.addStep([ this.node ], [ this.node.getParent() ], [ this.node.position.clone() ]);
+        this.node.setParent(root);
+        this.node.setPosition(selfPos);
+        var offset = 0;
         this.node.runAction(cc.sequence(cc.moveTo(.1, 0, offset), cc.callFunc(function() {
           _this.setDefaultPosition();
           _this.node.group = "default";
@@ -1090,7 +1243,9 @@ window.__require = function e(t, n, r) {
           console.error(" \u6ca1\u6709 Poker\u7c7b");
           return;
         }
+        if (this.cycled) return;
         poker.forward = this;
+        poker.next = null;
         this.next = poker;
         if (Poker_1.checkBeNext(this, this.next)) this.setNormal(); else {
           console.log(" onAddChild call setAllGray:", this.value, ",key:", this.key);
@@ -1101,10 +1256,15 @@ window.__require = function e(t, n, r) {
       };
       Poker.checkBeNext = function(poker, next) {
         if (!next || !poker) return false;
-        return poker.getValue() - next.getValue() == 1;
+        return poker.getValue() - next.getValue() == 1 && poker.getPokerColor() != next.getPokerColor();
+      };
+      Poker.checkRecycled = function(poker, next) {
+        if (!next || !poker) return false;
+        return poker.getValue() - next.getValue() == 1 && poker.getPokerColor() == next.getPokerColor();
       };
       Poker.prototype.onChildRemove = function() {
         console.log(" onChildRemove:", this.node.childrenCount);
+        if (this.cycled) return;
         if (this.node.childrenCount <= this.defualtChildCount && !this.isToRemove) {
           this.next = null;
           Game_1.Game.placePokerRoot.add(this.key, this.node);
@@ -1139,24 +1299,26 @@ window.__require = function e(t, n, r) {
       Poker.prototype.isGray = function() {
         return this.frontCard.node.color == cc.Color.GRAY && false == this.canMove;
       };
-      Poker.prototype.setCardState = function(state) {
-        console.log("setCardState:", this.value, this.key);
+      Poker.prototype.setCardState = function(state, canMove) {
+        void 0 === canMove && (canMove = true);
+        console.log("setCardState:", this.value, this.key, canMove);
         this.carState = state;
         this.frontCard.node.scaleX = this.carState == CardState.Front ? 1 : 0;
         this.backCard.node.scaleX = this.carState == CardState.Back ? 1 : 0;
-        this.canMove = this.carState == CardState.Front;
+        this.canMove = this.carState == CardState.Front && canMove;
         this.canMove && this.next && !Poker_1.checkBeNext(this, this.next) && (this.canMove = false);
         if (this.canMove) {
           this.frontCard.node.color = cc.Color.WHITE;
           this.setDefaultPosition();
-        } else this.frontCard.node.color = cc.Color.GRAY;
+        } else this.forward && (this.frontCard.node.color = cc.Color.GRAY);
       };
       Poker.prototype.isNormal = function() {
         return this.carState == CardState.Front && this.canMove;
       };
-      Poker.prototype.flipCard = function(duration) {
+      Poker.prototype.flipCard = function(duration, canMove, callback) {
         var _this = this;
         void 0 === duration && (duration = 1);
+        void 0 === canMove && (canMove = true);
         if (this.frontCard.node.getNumberOfRunningActions() > 0 || this.backCard.node.getNumberOfRunningActions() > 0) {
           console.warn("\u7ffb\u9762\u672a\u5b8c\u6210");
           this.flips.push(duration);
@@ -1164,7 +1326,8 @@ window.__require = function e(t, n, r) {
         }
         if (this.carState == CardState.Back) {
           this.frontCard.node.runAction(cc.sequence(cc.delayTime(duration), cc.scaleTo(duration, 1, 1), cc.callFunc(function() {
-            _this.setCardState(CardState.Front);
+            _this.setCardState(CardState.Front, canMove);
+            callback && callback();
             if (_this.flips.length > 0) {
               _this.frontCard.node.stopAllActions();
               _this.flipCard.call(_this, _this.flips.pop());
@@ -1173,7 +1336,8 @@ window.__require = function e(t, n, r) {
           this.backCard.node.runAction(cc.scaleTo(duration, 0, 1));
         } else {
           this.backCard.node.runAction(cc.sequence(cc.delayTime(duration), cc.scaleTo(duration, 1, 1), cc.callFunc(function() {
-            _this.setCardState(CardState.Back);
+            _this.setCardState(CardState.Back, false);
+            callback && callback();
             if (_this.flips.length > 0) {
               _this.backCard.node.stopAllActions();
               _this.flipCard.call(_this, _this.flips.pop());
@@ -1183,9 +1347,6 @@ window.__require = function e(t, n, r) {
         }
       };
       Poker.prototype.start = function() {};
-      Poker.prototype.update = function(dt) {
-        null != Game_1.Game.placePokerRoot.keyOf(this.node) ? this.frontCard.node.color = this.canMove ? cc.Color.GREEN : cc.Color.RED : this.frontCard.node.color = this.canMove ? cc.Color.WHITE : cc.Color.GRAY;
-      };
       Poker.prototype.onSetParent = function(parent) {
         if (!parent) return;
         if (this.isToRemove) return;
@@ -1396,4 +1557,4 @@ window.__require = function e(t, n, r) {
     };
     cc._RF.pop();
   }, {} ]
-}, {}, [ "GameScene", "Poker", "PokerRoot", "AudioController", "EventManager", "EventName", "Game", "GameFactory", "HashMap", "celerx" ]);
+}, {}, [ "GameScene", "Poker", "PokerRoot", "Pokers", "AudioController", "EventManager", "EventName", "Game", "GameFactory", "HashMap", "celerx" ]);
