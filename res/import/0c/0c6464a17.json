@@ -48,8 +48,8 @@
       },
       "_scale": {
         "__type__": "cc.Vec3",
-        "x": 0.48341471354166665,
-        "y": 0.48341471354166665,
+        "x": 0.483642578125,
+        "y": 0.483642578125,
         "z": 1
       },
       "autoReleaseAssets": false
@@ -394,12 +394,6 @@
       "_level": 2,
       "_components": [
         {
-          "__type__": "11cba6M6B9Awbm3ikseAzvv",
-          "node": {
-            "__id__": 10
-          }
-        },
-        {
           "__type__": "cc.Sprite",
           "node": {
             "__id__": 10
@@ -408,6 +402,12 @@
             "__uuid__": "a2MjXRFdtLlYQ5ouAFv/+R"
           },
           "_sizeMode": 0
+        },
+        {
+          "__type__": "bc8dfsy/SxCYZDWNhC7pOvt",
+          "node": {
+            "__id__": 10
+          }
         }
       ],
       "_contentSize": {
@@ -436,12 +436,6 @@
       "_level": 2,
       "_components": [
         {
-          "__type__": "11cba6M6B9Awbm3ikseAzvv",
-          "node": {
-            "__id__": 11
-          }
-        },
-        {
           "__type__": "cc.Sprite",
           "node": {
             "__id__": 11
@@ -450,6 +444,12 @@
             "__uuid__": "a2MjXRFdtLlYQ5ouAFv/+R"
           },
           "_sizeMode": 0
+        },
+        {
+          "__type__": "bc8dfsy/SxCYZDWNhC7pOvt",
+          "node": {
+            "__id__": 11
+          }
         }
       ],
       "_contentSize": {
@@ -478,12 +478,6 @@
       "_level": 2,
       "_components": [
         {
-          "__type__": "11cba6M6B9Awbm3ikseAzvv",
-          "node": {
-            "__id__": 12
-          }
-        },
-        {
           "__type__": "cc.Sprite",
           "node": {
             "__id__": 12
@@ -492,6 +486,12 @@
             "__uuid__": "a2MjXRFdtLlYQ5ouAFv/+R"
           },
           "_sizeMode": 0
+        },
+        {
+          "__type__": "bc8dfsy/SxCYZDWNhC7pOvt",
+          "node": {
+            "__id__": 12
+          }
         }
       ],
       "_contentSize": {
@@ -520,12 +520,6 @@
       "_level": 2,
       "_components": [
         {
-          "__type__": "11cba6M6B9Awbm3ikseAzvv",
-          "node": {
-            "__id__": 13
-          }
-        },
-        {
           "__type__": "cc.Sprite",
           "node": {
             "__id__": 13
@@ -534,6 +528,12 @@
             "__uuid__": "a2MjXRFdtLlYQ5ouAFv/+R"
           },
           "_sizeMode": 0
+        },
+        {
+          "__type__": "bc8dfsy/SxCYZDWNhC7pOvt",
+          "node": {
+            "__id__": 13
+          }
         }
       ],
       "_contentSize": {

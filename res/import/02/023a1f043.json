@@ -218,7 +218,8 @@
           "_fontSize": 20,
           "_lineHeight": 20,
           "_N$horizontalAlign": 1,
-          "_N$verticalAlign": 1
+          "_N$verticalAlign": 1,
+          "_N$overflow": 2
         }
       ],
       "_prefab": {
@@ -236,6 +237,7 @@
       },
       "_contentSize": {
         "__type__": "cc.Size",
+        "width": 105,
         "height": 20
       },
       "_position": {
