@@ -1006,7 +1006,7 @@ window.__require = function e(t, n, r) {
       ACTION_TAG[ACTION_TAG["DEV_POKER"] = 3] = "DEV_POKER";
       ACTION_TAG[ACTION_TAG["RE_DEV_POKER"] = 4] = "RE_DEV_POKER";
     })(ACTION_TAG = exports.ACTION_TAG || (exports.ACTION_TAG = {}));
-    exports.OFFSET_Y = -30;
+    exports.OFFSET_Y = -40;
     exports.OFFSET_X = 0;
     cc._RF.pop();
   }, {} ],
