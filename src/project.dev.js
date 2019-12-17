@@ -1281,7 +1281,6 @@ window.__require = function e(t, n, r) {
         if (this.node.childrenCount <= this.defualtChildCount) {
           console.warn("update poker root:", index, ", value:", this.value);
           Game_1.Game.addPlacePokerRoot(index, this.node);
-          this.check(1);
         } else {
           if (!this.next) {
             console.log("no next, value:", this.value, ", key:", this.key);
