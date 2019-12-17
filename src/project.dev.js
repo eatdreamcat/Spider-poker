@@ -563,6 +563,7 @@ window.__require = function e(t, n, r) {
         var oldChildren = this.PokerFlipRoot.children.concat();
         var _loop_2 = function(i) {
           var pokerNode = this_2.PokerDevl.children[this_2.PokerDevl.childrenCount - 1];
+          if (!pokerNode) return "break";
           var selfPos = this_2.PokerFlipRoot.convertToNodeSpaceAR(pokerNode.parent.convertToWorldSpaceAR(pokerNode.position));
           var poker = pokerNode.getComponent(Poker_1.default);
           nodes.push(pokerNode);
@@ -589,7 +590,10 @@ window.__require = function e(t, n, r) {
           }, .05);
         };
         var this_2 = this;
-        for (var i = 0; i < 3; i++) _loop_2(i);
+        for (var i = 0; i < 3; i++) {
+          var state_1 = _loop_2(i);
+          if ("break" === state_1) break;
+        }
         for (var _i = 0, oldChildren_1 = oldChildren; _i < oldChildren_1.length; _i++) {
           var child = oldChildren_1[_i];
           child.x = 0;
@@ -1461,7 +1465,7 @@ window.__require = function e(t, n, r) {
       };
       Poker.prototype.start = function() {};
       Poker.prototype.update = function(dt) {
-        null != Game_1.Game.getPlacePokerRoot().keyOf(this.node) ? this.frontCard.node.color = this.canMove ? cc.Color.GREEN : cc.Color.RED : null == Game_1.Game.getCycledPokerRoot().keyOf(this.node) && (this.frontCard.node.color = this.canMove ? cc.Color.WHITE : cc.Color.GRAY);
+        null != Game_1.Game.getPlacePokerRoot().keyOf(this.node) ? this.frontCard.node.color = this.canMove ? cc.Color.ORANGE : cc.Color.RED : null == Game_1.Game.getCycledPokerRoot().keyOf(this.node) && (this.frontCard.node.color = this.canMove ? cc.Color.WHITE : cc.Color.GRAY);
       };
       Poker.prototype.onSetParent = function(parent) {
         if (!parent) {
