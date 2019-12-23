@@ -179,48 +179,12 @@ window.__require = function e(t, n, r) {
     });
     var GlobalEvent;
     (function(GlobalEvent) {
-      GlobalEvent[GlobalEvent["Cube_ADJUST_DONE"] = 0] = "Cube_ADJUST_DONE";
-      GlobalEvent[GlobalEvent["DRAG_ADJUST_DONE"] = 1] = "DRAG_ADJUST_DONE";
-      GlobalEvent[GlobalEvent["CUBE_BOX_DRAGING"] = 2] = "CUBE_BOX_DRAGING";
-      GlobalEvent[GlobalEvent["CUBE_BOX_DRAG_INDEX"] = 3] = "CUBE_BOX_DRAG_INDEX";
-      GlobalEvent[GlobalEvent["CUBE_BOX_DRAG_CANCEL"] = 4] = "CUBE_BOX_DRAG_CANCEL";
-      GlobalEvent[GlobalEvent["CUBE_BOX_PLACE_DONE"] = 5] = "CUBE_BOX_PLACE_DONE";
-      GlobalEvent[GlobalEvent["CUBE_BOX_SET_STATE_DONE"] = 6] = "CUBE_BOX_SET_STATE_DONE";
-      GlobalEvent[GlobalEvent["GAME_START"] = 7] = "GAME_START";
-      GlobalEvent[GlobalEvent["GAME_RESTART"] = 8] = "GAME_RESTART";
-      GlobalEvent[GlobalEvent["EAT_COL"] = 9] = "EAT_COL";
-      GlobalEvent[GlobalEvent["EAT_ROW"] = 10] = "EAT_ROW";
-      GlobalEvent[GlobalEvent["KILL_DIRECTLY"] = 11] = "KILL_DIRECTLY";
-      GlobalEvent[GlobalEvent["UPDATE_SCORE"] = 12] = "UPDATE_SCORE";
-      GlobalEvent[GlobalEvent["UPDATE_COMBO"] = 13] = "UPDATE_COMBO";
-      GlobalEvent[GlobalEvent["GAME_OVER"] = 14] = "GAME_OVER";
-      GlobalEvent[GlobalEvent["ON_KILL"] = 15] = "ON_KILL";
-      GlobalEvent[GlobalEvent["ROW_EFFECT"] = 16] = "ROW_EFFECT";
-      GlobalEvent[GlobalEvent["COL_EFFECT"] = 17] = "COL_EFFECT";
-      GlobalEvent[GlobalEvent["SHOW_TEXT"] = 18] = "SHOW_TEXT";
-      GlobalEvent[GlobalEvent["UPDATE_PRE_SCORE"] = 19] = "UPDATE_PRE_SCORE";
-      GlobalEvent[GlobalEvent["SHOW_OVER_LAYER"] = 20] = "SHOW_OVER_LAYER";
-      GlobalEvent[GlobalEvent["CLEAR_CUBE_ROOT"] = 21] = "CLEAR_CUBE_ROOT";
-      GlobalEvent[GlobalEvent["PREPARE_CUBE_BG"] = 22] = "PREPARE_CUBE_BG";
-      GlobalEvent[GlobalEvent["PLAY_RAINBOW_EFFECT"] = 23] = "PLAY_RAINBOW_EFFECT";
-      GlobalEvent[GlobalEvent["UPDATE_RAINBOW_SCORE"] = 24] = "UPDATE_RAINBOW_SCORE";
-      GlobalEvent[GlobalEvent["PLAY_KILL_EFFECT"] = 25] = "PLAY_KILL_EFFECT";
-      GlobalEvent[GlobalEvent["PLAY_30_BGM"] = 26] = "PLAY_30_BGM";
-      GlobalEvent[GlobalEvent["PLAY_LETSGO"] = 27] = "PLAY_LETSGO";
-      GlobalEvent[GlobalEvent["PLAY_BIU"] = 28] = "PLAY_BIU";
-      GlobalEvent[GlobalEvent["PLAY_TOUCH"] = 29] = "PLAY_TOUCH";
-      GlobalEvent[GlobalEvent["PLAY_PLACE"] = 30] = "PLAY_PLACE";
-      GlobalEvent[GlobalEvent["PLAY_TEXT"] = 31] = "PLAY_TEXT";
-      GlobalEvent[GlobalEvent["PLAY_SCORE"] = 32] = "PLAY_SCORE";
-      GlobalEvent[GlobalEvent["PLAY_OVER"] = 33] = "PLAY_OVER";
-      GlobalEvent[GlobalEvent["PLAY_SPECIAL_A"] = 34] = "PLAY_SPECIAL_A";
-      GlobalEvent[GlobalEvent["PLAY_SPECIAL_B"] = 35] = "PLAY_SPECIAL_B";
-      GlobalEvent[GlobalEvent["PLAY_OVER_NO_PLACE"] = 36] = "PLAY_OVER_NO_PLACE";
-      GlobalEvent[GlobalEvent["PLAY_OVER_TIME_UP"] = 37] = "PLAY_OVER_TIME_UP";
-      GlobalEvent[GlobalEvent["PLAY_OVER_TAB"] = 38] = "PLAY_OVER_TAB";
-      GlobalEvent[GlobalEvent["PLAY_LAY_FAIL"] = 39] = "PLAY_LAY_FAIL";
-      GlobalEvent[GlobalEvent["PLAY_SPECIAL_B_BGM"] = 40] = "PLAY_SPECIAL_B_BGM";
-      GlobalEvent[GlobalEvent["PLAY_SPECIAL_A_BGM"] = 41] = "PLAY_SPECIAL_A_BGM";
+      GlobalEvent[GlobalEvent["UPDATE_DRAW_ICON"] = 0] = "UPDATE_DRAW_ICON";
+      GlobalEvent[GlobalEvent["UPDATE_SCORE"] = 1] = "UPDATE_SCORE";
+      GlobalEvent[GlobalEvent["UPDATE_BACK_BTN_ICON"] = 2] = "UPDATE_BACK_BTN_ICON";
+      GlobalEvent[GlobalEvent["OPEN_RESULT"] = 3] = "OPEN_RESULT";
+      GlobalEvent[GlobalEvent["REMOVE_POKER"] = 4] = "REMOVE_POKER";
+      GlobalEvent[GlobalEvent["RESTART"] = 5] = "RESTART";
     })(GlobalEvent = exports.GlobalEvent || (exports.GlobalEvent = {}));
     cc._RF.pop();
   }, {} ],
@@ -306,12 +270,16 @@ window.__require = function e(t, n, r) {
     (function(Step) {
       Step[Step["INIT"] = 0] = "INIT";
       Step[Step["POKER"] = 4] = "POKER";
-      Step[Step["DONE"] = 4] = "DONE";
+      Step[Step["AddScore"] = 8] = "AddScore";
+      Step[Step["SubScore"] = 16] = "SubScore";
+      Step[Step["DONE"] = 28] = "DONE";
     })(Step || (Step = {}));
     var GameFactory = function() {
       function GameFactory() {
         this.step = Step.INIT;
         this.PokerPool = new HashMap_1.HashMap();
+        this.addScorePool = new HashMap_1.HashMap();
+        this.subScorePool = new HashMap_1.HashMap();
       }
       Object.defineProperty(GameFactory, "inst", {
         get: function() {
@@ -320,9 +288,11 @@ window.__require = function e(t, n, r) {
         enumerable: true,
         configurable: true
       });
-      GameFactory.prototype.init = function(callback, poker) {
+      GameFactory.prototype.init = function(callback, poker, addScoreLabel, subScoreLabel) {
         this.doneCallback = callback;
         this.initPoker(300, poker);
+        this.initAddScore(10, addScoreLabel);
+        this.initSubScore(10, subScoreLabel);
       };
       GameFactory.prototype.nextStep = function(step) {
         this.step |= step;
@@ -349,6 +319,46 @@ window.__require = function e(t, n, r) {
       GameFactory.prototype.putPoker = function(poker) {
         this.PokerPool.get("Poker").put(poker);
       };
+      GameFactory.prototype.initAddScore = function(initCount, prefab) {
+        var self = this;
+        if (prefab) {
+          self.addScorePool.add("AddScore", new ObjPool(prefab, initCount));
+          self.nextStep(Step.AddScore);
+        } else cc.loader.loadRes("prefabs/AddScoreLabel", cc.Prefab, function(err, prefabRes) {
+          if (err) console.error(err); else {
+            self.addScorePool.add("AddScore", new ObjPool(prefabRes, initCount));
+            self.nextStep(Step.AddScore);
+          }
+        });
+      };
+      GameFactory.prototype.getAddScore = function() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) args[_i] = arguments[_i];
+        return this.addScorePool.get("AddScore").get(args);
+      };
+      GameFactory.prototype.putAddScore = function(poker) {
+        this.addScorePool.get("AddScore").put(poker);
+      };
+      GameFactory.prototype.initSubScore = function(initCount, prefab) {
+        var self = this;
+        if (prefab) {
+          self.subScorePool.add("SubScore", new ObjPool(prefab, initCount));
+          self.nextStep(Step.SubScore);
+        } else cc.loader.loadRes("prefabs/SubScoreLabel", cc.Prefab, function(err, prefabRes) {
+          if (err) console.error(err); else {
+            self.subScorePool.add("SubScore", new ObjPool(prefabRes, initCount));
+            self.nextStep(Step.SubScore);
+          }
+        });
+      };
+      GameFactory.prototype.getSubScore = function() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) args[_i] = arguments[_i];
+        return this.subScorePool.get("SubScore").get(args);
+      };
+      GameFactory.prototype.putSubScore = function(poker) {
+        this.subScorePool.get("SubScore").put(poker);
+      };
       return GameFactory;
     }();
     exports.gFactory = GameFactory.inst;
@@ -366,6 +376,8 @@ window.__require = function e(t, n, r) {
     var Game_1 = require("./controller/Game");
     var Poker_1 = require("./Poker");
     var Pokers_1 = require("./Pokers");
+    var EventManager_1 = require("./controller/EventManager");
+    var EventName_1 = require("./controller/EventName");
     var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
     var celerx = require("./utils/celerx");
     var LOAD_STEP;
@@ -387,15 +399,51 @@ window.__require = function e(t, n, r) {
         _this.PokerDevl = null;
         _this.RemoveNode = null;
         _this.BackButton = null;
+        _this.PauseButton = null;
         _this.CycleRoot = null;
         _this.PokerFlipRoot = null;
+        _this.BackButtonAtlas = null;
+        _this.DrawButtonAtlas = null;
+        _this.TimeLabel = null;
+        _this.ScoreLabel = null;
+        _this.SmallOrg = null;
+        _this.SubScoreLabel = null;
+        _this.AddScoreLabel = null;
+        _this.TimeAnimation = null;
+        _this.LightAnimation = null;
+        _this.Stop = null;
+        _this.FlipAnimation = null;
         _this.step = LOAD_STEP.READY;
         _this.canDispatchPoker = false;
         _this.dispatchCardCount = 28;
         _this.devTime = 10;
-        _this.devOffset = 0;
+        _this.backTime = 10;
+        _this.score = 0;
+        _this.showScore = 0;
+        _this.scoreStep = 0;
         return _this;
       }
+      GameScene.prototype.init = function() {
+        this.Stop.active = false;
+        this.TimeLabel.string = CMath.TimeFormat(Game_1.Game.getGameTime());
+        this.ScoreLabel.string = "0";
+        this.TimeAnimation.node.active = false;
+        this.LightAnimation.node.active = false;
+        Game_1.Game.getCycledPokerRoot().clear();
+        Game_1.Game.getPlacePokerRoot().clear();
+        for (var _i = 0, _a = this.PlaceRoot.children; _i < _a.length; _i++) {
+          var child = _a[_i];
+          Game_1.Game.addPlacePokerRoot(parseInt(child.name), child);
+        }
+        for (var _b = 0, _c = this.CycleRoot.children; _b < _c.length; _b++) {
+          var child = _c[_b];
+          Game_1.Game.addCycledPokerRoot(parseInt(child.name), child);
+        }
+      };
+      GameScene.prototype.restart = function() {
+        this.init();
+        this.startGame();
+      };
       GameScene.prototype.onLoad = function() {
         var _this = this;
         Game_1.Game.removeNode = this.RemoveNode;
@@ -405,29 +453,105 @@ window.__require = function e(t, n, r) {
         celerx.onStart(function() {
           self.celerStart();
         }.bind(this));
+        celerx.provideScore(function() {
+          return parseInt(Game_1.Game.getScore().toString());
+        });
         true, this.celerStart();
+        this.init();
         GameFactory_1.gFactory.init(function() {
           this.nextStep(LOAD_STEP.PREFABS);
-        }.bind(this), this.Poker);
-        for (var _i = 0, _a = this.PlaceRoot.children; _i < _a.length; _i++) {
-          var child = _a[_i];
-          Game_1.Game.addPlacePokerRoot(parseInt(child.name), child);
-        }
-        for (var _b = 0, _c = this.CycleRoot.children; _b < _c.length; _b++) {
-          var child = _c[_b];
-          Game_1.Game.addCycledPokerRoot(parseInt(child.name), child);
-        }
+        }.bind(this), this.Poker, this.AddScoreLabel, this.SubScoreLabel);
         this.nextStep(LOAD_STEP.GUIDE);
         this.PokerClip.on(cc.Node.EventType.TOUCH_START, this.dispatchPoker, this);
+        this.PauseButton.node.on(cc.Node.EventType.TOUCH_START, function() {
+          _this.Stop.active = true;
+          Game_1.Game.setPause(true);
+        }, this);
         this.PokerFlipRoot.on(cc.Node.EventType.CHILD_ADDED, this.onPokerFlipAddChild, this);
+        this.PokerDevl.on(cc.Node.EventType.CHILD_REMOVED, function() {
+          if (!_this.LightAnimation.node.active && _this.PokerDevl.childrenCount <= 0) {
+            _this.LightAnimation.node.active = true;
+            _this.LightAnimation.play();
+          }
+        }, this);
+        this.PokerDevl.on(cc.Node.EventType.CHILD_ADDED, function(child) {
+          var poker = child.getComponent(Poker_1.default);
+          poker && poker.setRecycle(false);
+        }, this);
         this.PokerFlipRoot.on(cc.Node.EventType.CHILD_REMOVED, this.onPokerFlipRemoveChild, this);
         this.PokerDevl.on(cc.Node.EventType.TOUCH_START, function() {
+          if (Game_1.Game.isTimeOver()) return;
           if (_this.devTime >= .3) {
             _this.devPoker();
             _this.devTime = 0;
           }
         }, this);
-        this.BackButton.node.on(cc.Node.EventType.TOUCH_START, Game_1.Game.backStep, Game_1.Game);
+        this.BackButton.node.getChildByName("Background").getComponent(cc.Sprite).spriteFrame = this.BackButtonAtlas.getSpriteFrame("btn_backgray");
+        this.BackButton.interactable = false;
+        this.BackButton.node.on(cc.Node.EventType.TOUCH_START, function() {
+          if (Game_1.Game.isTimeOver() || _this.backTime < .5) return;
+          _this.backTime = 0;
+          Game_1.Game.backStep();
+        }, Game_1.Game);
+        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.UPDATE_BACK_BTN_ICON, function() {
+          _this.BackButton.interactable = Game_1.Game.canBackStep();
+          _this.BackButton.interactable ? _this.BackButton.node.getChildByName("Background").getComponent(cc.Sprite).spriteFrame = _this.BackButtonAtlas.getSpriteFrame("btn_back") : _this.BackButton.node.getChildByName("Background").getComponent(cc.Sprite).spriteFrame = _this.BackButtonAtlas.getSpriteFrame("btn_backgray");
+        }, this);
+        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.UPDATE_DRAW_ICON, function() {
+          switch (Game_1.Game.getFreeDrawTimes()) {
+           case 1:
+            _this.PokerDevl.getComponent(cc.Sprite).spriteFrame = _this.DrawButtonAtlas.getSpriteFrame("free_draw_1");
+            break;
+
+           case 2:
+            _this.PokerDevl.getComponent(cc.Sprite).spriteFrame = _this.DrawButtonAtlas.getSpriteFrame("free_draw_2");
+            break;
+
+           case 3:
+            _this.PokerDevl.getComponent(cc.Sprite).spriteFrame = _this.DrawButtonAtlas.getSpriteFrame("free_draw_3");
+            break;
+
+           default:
+            _this.PokerDevl.getComponent(cc.Sprite).spriteFrame = _this.DrawButtonAtlas.getSpriteFrame("draw_20");
+          }
+        }, this);
+        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.UPDATE_SCORE, function(score, pos) {
+          console.log(" score change: ", score, ",pos:", pos);
+          _this.scoreStep = Math.max(score / 20, _this.scoreStep);
+          var targetPos = CMath.ConvertToNodeSpaceAR(_this.ScoreLabel.node, _this.RemoveNode);
+          if (score > 0) {
+            var scoreLabel_1 = GameFactory_1.gFactory.getAddScore("/" + score.toString());
+            scoreLabel_1.setParent(_this.RemoveNode);
+            scoreLabel_1.setPosition(pos);
+            scoreLabel_1.runAction(cc.sequence(cc.scaleTo(0, 0), cc.scaleTo(.15, 1.2), cc.delayTime(.25), cc.scaleTo(.1, 1), cc.moveTo(.25, targetPos.x, targetPos.y), cc.callFunc(function() {
+              _this.showScore = Game_1.Game.getScore();
+              GameFactory_1.gFactory.putAddScore(scoreLabel_1);
+            })));
+          } else {
+            var scoreLabel_2 = GameFactory_1.gFactory.getSubScore("/" + score.toString());
+            scoreLabel_2.setParent(_this.RemoveNode);
+            scoreLabel_2.setPosition(pos);
+            scoreLabel_2.runAction(cc.sequence(cc.scaleTo(0, 0), cc.scaleTo(.15, 1.2), cc.delayTime(.25), cc.scaleTo(.1, 1), cc.moveTo(.25, targetPos.x, targetPos.y), cc.callFunc(function() {
+              _this.showScore = Game_1.Game.getScore();
+              GameFactory_1.gFactory.putSubScore(scoreLabel_2);
+            })));
+          }
+        }, this);
+        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.OPEN_RESULT, this.openResult, this);
+        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.RESTART, this.restart, this);
+        cc.loader.loadRes("prefabs/Result");
+      };
+      GameScene.prototype.openResult = function() {
+        var _this = this;
+        this.Stop.active = false;
+        if (this.node.getChildByName("Result")) return;
+        cc.loader.loadRes("prefabs/Result", cc.Prefab, function(err, result) {
+          if (err) celerx.submitScore(Game_1.Game.getScore()); else {
+            var resultLayer = cc.instantiate(result);
+            resultLayer.name = "Result";
+            _this.node.addChild(resultLayer);
+          }
+        });
       };
       GameScene.prototype.celerStart = function() {
         var match = celerx.getMatch();
@@ -445,19 +569,22 @@ window.__require = function e(t, n, r) {
       };
       GameScene.prototype.startGame = function() {
         var _this = this;
+        console.log(" this.PokerDevl ------------------------- :", this.PokerDevl.childrenCount);
         var pokers = Pokers_1.Pokers.concat();
         var pokerIndex = Pokers_1.PokerIndex.concat();
         var weightDiv = pokerIndex.length;
         while (pokers.length > 0) {
-          var curIndex = this.PokerDevl.childrenCount;
+          var curIndex = pokers.length - 1;
           var pokerWeight = 1 - (weightDiv - pokerIndex.indexOf(curIndex)) / pokerIndex.length;
-          console.warn("PokerWeight:", pokerWeight);
           var totalWeight = pokers.length;
-          var i = pokers.splice(Math.floor(CMath.getRandom(pokerWeight, 1) * totalWeight), 1);
+          var random = CMath.getRandom(0, 1);
+          var randomIndex = Math.floor(random * totalWeight);
+          var i = pokers.splice(randomIndex, 1);
+          console.warn("randomIndex:", randomIndex, ", poker:", i, ",pokerWeight:", pokerWeight, ",random:", random);
           var pokerNode = GameFactory_1.gFactory.getPoker(i);
           pokerNode.name = curIndex.toString();
           pokerNode.x = 0;
-          pokerNode.y = .3 * -this.PokerDevl.childrenCount;
+          pokerNode.y = 0;
           this.PokerDevl.addChild(pokerNode);
         }
         var count = 0;
@@ -474,7 +601,7 @@ window.__require = function e(t, n, r) {
             var child = _this.PokerClip.children[_this.PokerClip.childrenCount - 1];
             targetPos = cc.v2(child.x, child.y);
           }
-          var selfPos = _this.PokerClip.convertToNodeSpaceAR(pokerNode.parent.parent.convertToWorldSpaceAR(pokerNode.position));
+          var selfPos = CMath.ConvertToNodeSpaceAR(_this.PokerClip, pokerNode.parent.parent);
           var poker_1 = pokerNode.getComponent(Poker_1.default);
           pokerNode.setParent(_this.PokerClip);
           pokerNode.setPosition(selfPos);
@@ -485,18 +612,25 @@ window.__require = function e(t, n, r) {
             func2();
           }, _this)));
         };
-        var pokerPos = [ 0, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6 ];
-        var pokerFlips = [ 0, 2, 5, 9, 14, 20, 27 ];
+        var pokerPos = [ 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6, 3, 4, 5, 6, 4, 5, 6, 5, 6, 6 ];
+        var pokerFlips = [ 0, 7, 13, 18, 22, 25, 27 ];
         var func1 = function() {
           if (count++ >= _this.dispatchCardCount) {
             _this.canDispatchPoker = true;
+            _this.LightAnimation.node.active = true;
+            _this.LightAnimation.play();
             return;
           }
           var pokerNode = _this.PokerDevl.getChildByName((totalCount - count).toString());
+          if (!pokerNode) {
+            console.error(" poker node invaild!");
+            console.log(_this.PokerDevl);
+            return;
+          }
           var targetNode = Game_1.Game.getPlacePokerRoot().get(pokerPos[count - 1]);
           if (targetNode) {
-            var selfPos = targetNode.convertToNodeSpaceAR(pokerNode.parent.convertToWorldSpaceAR(pokerNode.position));
-            var offset = Pokers_1.OFFSET_Y;
+            var selfPos = CMath.ConvertToNodeSpaceAR(pokerNode, targetNode);
+            var offset = Pokers_1.OFFSET_Y / 3;
             if (!targetNode.getComponent(Poker_1.default)) {
               Game_1.Game.addPlacePokerRoot(pokerPos[count - 1], pokerNode);
               offset = 0;
@@ -522,13 +656,25 @@ window.__require = function e(t, n, r) {
         var _this = this;
         if (this.PokerDevl.childrenCount > 0) return;
         if (this.PokerFlipRoot.childrenCount <= 0) return;
+        this.LightAnimation.node.active && (this.LightAnimation.node.active = false);
+        var scores = [];
+        var drawTimesCost = 0;
+        var pos = CMath.ConvertToNodeSpaceAR(this.PokerDevl, this.RemoveNode);
+        if (Game_1.Game.getFreeDrawTimes() > 0) {
+          Game_1.Game.addFreeDrawTimes(-1);
+          drawTimesCost = 1;
+        } else {
+          Game_1.Game.getScore() >= 20 ? scores.push(20) : scores.push(Game_1.Game.getScore());
+          Game_1.Game.addScore(-20, pos);
+        }
         var nodes = [];
         var parents = [];
         var poses = [];
+        this.FlipAnimation.play();
         var children = this.PokerFlipRoot.children.concat().reverse();
         var i = 0;
         var _loop_1 = function(child) {
-          var selfPos = this_1.PokerDevl.convertToNodeSpaceAR(child.parent.convertToWorldSpaceAR(child.position));
+          var selfPos = CMath.ConvertToNodeSpaceAR(child, this_1.PokerDevl);
           var poker = child.getComponent(Poker_1.default);
           nodes.push(child);
           parents.push(this_1.PokerFlipRoot);
@@ -536,14 +682,14 @@ window.__require = function e(t, n, r) {
           child.setParent(this_1.PokerDevl);
           child.setPosition(selfPos);
           poker.setDefaultPosition(cc.v2(0, 0));
-          poker.flipCard(.1, false);
+          poker.flipCard(0, false);
           child.group = "top";
           this_1.scheduleOnce(function() {
-            var action = cc.sequence(cc.delayTime(i / 100), cc.moveTo(.1, 0, 0), cc.callFunc(function() {
+            var action = cc.sequence(cc.moveTo(0, 0, 0), cc.callFunc(function() {
               child.group = "default";
             }, _this));
             action.setTag(Pokers_1.ACTION_TAG.RE_DEV_POKER);
-            child.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
+            child.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
             child.runAction(action);
           }, 0);
           i++;
@@ -553,7 +699,13 @@ window.__require = function e(t, n, r) {
           var child = children_1[_i];
           _loop_1(child);
         }
-        Game_1.Game.addStep(nodes, parents, poses);
+        Game_1.Game.addStep(nodes, parents, poses, [ {
+          callback: function() {
+            Game_1.Game.addFreeDrawTimes(drawTimesCost);
+          },
+          target: this,
+          args: []
+        } ], scores, [ pos ]);
       };
       GameScene.prototype.devPoker = function() {
         var _this = this;
@@ -573,7 +725,7 @@ window.__require = function e(t, n, r) {
           var pokerNode = this_2.PokerDevl.children[this_2.PokerDevl.childrenCount - 1];
           if (!pokerNode) return "break";
           count--;
-          var selfPos = this_2.PokerFlipRoot.convertToNodeSpaceAR(pokerNode.parent.convertToWorldSpaceAR(pokerNode.position));
+          var selfPos = CMath.ConvertToNodeSpaceAR(pokerNode, this_2.PokerFlipRoot);
           var poker = pokerNode.getComponent(Poker_1.default);
           nodes.push(pokerNode);
           parents.push(pokerNode.getParent());
@@ -594,7 +746,7 @@ window.__require = function e(t, n, r) {
             action.setTag(Pokers_1.ACTION_TAG.DEV_POKER);
             pokerNode.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
             pokerNode.runAction(action);
-          }, .05);
+          }, 0);
         };
         var this_2 = this;
         for (var i = 0; i < 3; i++) {
@@ -615,11 +767,15 @@ window.__require = function e(t, n, r) {
       GameScene.prototype.onPokerFlipAddChild = function(child) {
         var _this = this;
         console.log(" onPokerFlipAddChild:", this.PokerFlipRoot.childrenCount);
+        this.LightAnimation.node.active && (this.LightAnimation.node.active = false);
         var childIndex = this.PokerFlipRoot.children.indexOf(child);
         var poker = child.getComponent(Poker_1.default);
-        poker && (poker.isFront() || poker.flipCard(.1, false, function() {
-          poker.setCanMove(childIndex + 1 == _this.PokerFlipRoot.childrenCount);
-        }));
+        if (poker) {
+          poker.isFront() || poker.flipCard(.1, false, function() {
+            poker.setCanMove(childIndex + 1 == _this.PokerFlipRoot.childrenCount);
+          });
+          poker.setRecycle(false);
+        }
         childIndex >= 1 && this.PokerFlipRoot.children[childIndex - 1].getComponent(Poker_1.default).setCanMove(false);
         this.updateFlipPokerPosOnAdd();
       };
@@ -628,25 +784,26 @@ window.__require = function e(t, n, r) {
         this.updateFlipPokerPos();
       };
       GameScene.prototype.updateFlipPokerPosOnAdd = function() {
+        console.log("this.PokerFlipRoot.childrenCount :", this.PokerFlipRoot.childrenCount);
         if (this.PokerFlipRoot.childrenCount >= 3) {
           var child1 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 1];
-          var action1 = cc.moveTo(.1, 60, 0);
-          action1.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+          var action1 = cc.moveTo(.1, 120, 0);
+          action1.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
           child1.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
           child1.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
           child1.runAction(action1);
-          child1.getComponent(Poker_1.default).setFlipPos(cc.v2(60, 0));
-          child1.getComponent(Poker_1.default).setDefaultPosition(cc.v2(60, 0));
+          child1.getComponent(Poker_1.default).setFlipPos(cc.v2(120, 0));
+          child1.getComponent(Poker_1.default).setDefaultPosition(cc.v2(120, 0));
           child1.group = "default";
           child1.stopActionByTag(Pokers_1.ACTION_TAG.BACK_STEP);
           var child2 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 2];
-          var action2 = cc.moveTo(.1, 30, 0);
+          var action2 = cc.moveTo(.1, 60, 0);
           action2.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
           child2.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
           child2.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
           child2.runAction(action2);
-          child2.getComponent(Poker_1.default).setFlipPos(cc.v2(30, 0));
-          child2.getComponent(Poker_1.default).setDefaultPosition(cc.v2(30, 0));
+          child2.getComponent(Poker_1.default).setFlipPos(cc.v2(60, 0));
+          child2.getComponent(Poker_1.default).setDefaultPosition(cc.v2(60, 0));
           child2.group = "default";
           child2.stopActionByTag(Pokers_1.ACTION_TAG.BACK_STEP);
           var child3 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 3];
@@ -664,21 +821,21 @@ window.__require = function e(t, n, r) {
       GameScene.prototype.updateFlipPokerPos = function() {
         if (this.PokerFlipRoot.childrenCount >= 3) {
           var child1 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 1];
-          var action1 = cc.moveTo(.1, 60, 0);
+          var action1 = cc.moveTo(.1, 120, 0);
           action1.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
           child1.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
           child1.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
           child1.runAction(action1);
-          child1.getComponent(Poker_1.default).setFlipPos(cc.v2(60, 0));
-          child1.getComponent(Poker_1.default).setDefaultPosition(cc.v2(60, 0));
+          child1.getComponent(Poker_1.default).setFlipPos(cc.v2(120, 0));
+          child1.getComponent(Poker_1.default).setDefaultPosition(cc.v2(120, 0));
           var child2 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 2];
-          var action2 = cc.moveTo(.1, 30, 0);
+          var action2 = cc.moveTo(.1, 60, 0);
           action2.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
           child2.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
           child2.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
           child2.runAction(action2);
-          child2.getComponent(Poker_1.default).setFlipPos(cc.v2(30, 0));
-          child2.getComponent(Poker_1.default).setDefaultPosition(cc.v2(30, 0));
+          child2.getComponent(Poker_1.default).setFlipPos(cc.v2(60, 0));
+          child2.getComponent(Poker_1.default).setDefaultPosition(cc.v2(60, 0));
           var child3 = this.PokerFlipRoot.children[this.PokerFlipRoot.childrenCount - 3];
           var action3 = cc.moveTo(.1, 0, 0);
           action3.setTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
@@ -691,6 +848,7 @@ window.__require = function e(t, n, r) {
       };
       GameScene.prototype.dispatchPoker = function() {
         var _this = this;
+        if (Game_1.Game.isTimeOver()) return;
         if (this.PokerClip.childrenCount <= 0 || !this.canDispatchPoker) return;
         var nodes = [];
         var parents = [];
@@ -699,7 +857,7 @@ window.__require = function e(t, n, r) {
         Game_1.Game.getPlacePokerRoot().forEach(function(index, targetNode) {
           if (_this.PokerClip.childrenCount <= 0) return;
           var pokerNode = _this.PokerClip.children[_this.PokerClip.childrenCount - 1];
-          var selfPos = targetNode.convertToNodeSpaceAR(pokerNode.parent.convertToWorldSpaceAR(pokerNode.position));
+          var selfPos = CMath.ConvertToNodeSpaceAR(pokerNode, targetNode);
           var poker = pokerNode.getComponent(Poker_1.default);
           nodes.push(pokerNode);
           parents.push(pokerNode.getParent());
@@ -729,6 +887,28 @@ window.__require = function e(t, n, r) {
       GameScene.prototype.start = function() {};
       GameScene.prototype.update = function(dt) {
         this.devTime += dt;
+        this.backTime += dt;
+        if (Game_1.Game.isGameStarted()) {
+          Game_1.Game.addGameTime(-dt);
+          var gameTime = Game_1.Game.getGameTime();
+          this.TimeLabel.string = CMath.TimeFormat(gameTime);
+          if (gameTime <= 60) {
+            this.TimeLabel.font = this.SmallOrg;
+            if (!this.TimeAnimation.node.active) {
+              this.TimeAnimation.node.active = true;
+              this.TimeAnimation.play();
+            }
+          }
+          if (this.score < this.showScore) {
+            this.score += this.scoreStep;
+            this.score = Math.min(this.score, this.showScore);
+            this.ScoreLabel.string = this.score.toString();
+          } else if (this.score > this.showScore) {
+            this.score -= this.scoreStep;
+            this.score = Math.max(this.score, this.showScore);
+            this.ScoreLabel.string = this.score.toString();
+          }
+        }
       };
       __decorate([ property(cc.Prefab) ], GameScene.prototype, "Poker", void 0);
       __decorate([ property(cc.Node) ], GameScene.prototype, "PokerClip", void 0);
@@ -736,8 +916,20 @@ window.__require = function e(t, n, r) {
       __decorate([ property(cc.Node) ], GameScene.prototype, "PokerDevl", void 0);
       __decorate([ property(cc.Node) ], GameScene.prototype, "RemoveNode", void 0);
       __decorate([ property(cc.Button) ], GameScene.prototype, "BackButton", void 0);
+      __decorate([ property(cc.Button) ], GameScene.prototype, "PauseButton", void 0);
       __decorate([ property(cc.Node) ], GameScene.prototype, "CycleRoot", void 0);
       __decorate([ property(cc.Node) ], GameScene.prototype, "PokerFlipRoot", void 0);
+      __decorate([ property(cc.SpriteAtlas) ], GameScene.prototype, "BackButtonAtlas", void 0);
+      __decorate([ property(cc.SpriteAtlas) ], GameScene.prototype, "DrawButtonAtlas", void 0);
+      __decorate([ property(cc.Label) ], GameScene.prototype, "TimeLabel", void 0);
+      __decorate([ property(cc.Label) ], GameScene.prototype, "ScoreLabel", void 0);
+      __decorate([ property(cc.Font) ], GameScene.prototype, "SmallOrg", void 0);
+      __decorate([ property(cc.Prefab) ], GameScene.prototype, "SubScoreLabel", void 0);
+      __decorate([ property(cc.Prefab) ], GameScene.prototype, "AddScoreLabel", void 0);
+      __decorate([ property(cc.Animation) ], GameScene.prototype, "TimeAnimation", void 0);
+      __decorate([ property(cc.Animation) ], GameScene.prototype, "LightAnimation", void 0);
+      __decorate([ property(cc.Node) ], GameScene.prototype, "Stop", void 0);
+      __decorate([ property(cc.Animation) ], GameScene.prototype, "FlipAnimation", void 0);
       GameScene = __decorate([ ccclass ], GameScene);
       return GameScene;
     }(cc.Component);
@@ -746,6 +938,8 @@ window.__require = function e(t, n, r) {
   }, {
     "./Poker": "Poker",
     "./Pokers": "Pokers",
+    "./controller/EventManager": "EventManager",
+    "./controller/EventName": "EventName",
     "./controller/Game": "Game",
     "./controller/GameFactory": "GameFactory",
     "./utils/celerx": "celerx"
@@ -759,11 +953,20 @@ window.__require = function e(t, n, r) {
     var HashMap_1 = require("../utils/HashMap");
     var Poker_1 = require("../Poker");
     var Pokers_1 = require("../Pokers");
+    var EventManager_1 = require("./EventManager");
+    var EventName_1 = require("./EventName");
     var GameMgr = function() {
       function GameMgr() {
         this.placePokerRoot = new HashMap_1.HashMap();
         this.cyclePokerRoot = new HashMap_1.HashMap();
         this.stepInfoArray = [];
+        this.score = 0;
+        this.timeBonus = 0;
+        this.freeDrawTimes = 3;
+        this.flipCounts = 0;
+        this.gameStart = false;
+        this.gameTime = 300;
+        this.removePokerCount = 0;
       }
       GameMgr.prototype.GameMgr = function() {};
       Object.defineProperty(GameMgr, "inst", {
@@ -773,13 +976,96 @@ window.__require = function e(t, n, r) {
         enumerable: true,
         configurable: true
       });
-      GameMgr.prototype.addStep = function(node, lastParent, lastPos, func) {
+      GameMgr.prototype.getGameTime = function() {
+        return this.gameTime;
+      };
+      GameMgr.prototype.addGameTime = function(time) {
+        if (window["noTime"]) return;
+        this.gameTime += time;
+        this.gameTime = Math.max(this.gameTime, 0);
+        if (this.gameTime <= 0) {
+          this.gameStart = false;
+          EventManager_1.gEventMgr.emit(EventName_1.GlobalEvent.OPEN_RESULT);
+        }
+      };
+      GameMgr.prototype.calTimeBonus = function() {
+        if (this.gameTime >= 300 || this.gameTime <= 0) return;
+        this.timeBonus = 2 * (this.flipCounts + 7) / (300 - this.gameTime) * 20 * (this.flipCounts + 7);
+        exports.Game.addScore(this.timeBonus);
+      };
+      GameMgr.prototype.getTimeBonus = function() {
+        return this.timeBonus;
+      };
+      GameMgr.prototype.isTimeOver = function() {
+        return this.gameTime <= 0;
+      };
+      GameMgr.prototype.start = function() {
+        this.gameStart = true;
+      };
+      GameMgr.prototype.restart = function() {
+        this.gameTime = 300;
+        this.score = 0;
+        this.flipCounts = 0;
+        this.stepInfoArray = [];
+        this.timeBonus = 0;
+        this.cyclePokerRoot.clear();
+        this.placePokerRoot.clear();
+        this.gameStart = false;
+        this.removePokerCount = 0;
+        EventManager_1.gEventMgr.emit(EventName_1.GlobalEvent.REMOVE_POKER);
+      };
+      GameMgr.prototype.addRemovePokerCount = function(count) {
+        this.removePokerCount += count;
+        if (this.removePokerCount >= 52) {
+          console.error("------------------------ game restart ---------------------------");
+          EventManager_1.gEventMgr.emit(EventName_1.GlobalEvent.RESTART);
+        }
+      };
+      GameMgr.prototype.setPause = function(pause) {
+        this.gameStart = !pause;
+      };
+      GameMgr.prototype.isGameStarted = function() {
+        return this.gameStart;
+      };
+      GameMgr.prototype.addScore = function(score, pos) {
+        void 0 === pos && (pos = cc.v2(-200, 700));
+        if (0 == score) return;
+        this.score += score;
+        this.score = Math.max(this.score, 0);
+        console.log("------------------- score:", this.score, score);
+        EventManager_1.gEventMgr.emit(EventName_1.GlobalEvent.UPDATE_SCORE, score, pos);
+      };
+      GameMgr.prototype.getScore = function() {
+        return this.score;
+      };
+      GameMgr.prototype.addFreeDrawTimes = function(times) {
+        this.freeDrawTimes += times;
+        this.freeDrawTimes = Math.max(this.freeDrawTimes, 0);
+        EventManager_1.gEventMgr.emit(EventName_1.GlobalEvent.UPDATE_DRAW_ICON);
+      };
+      GameMgr.prototype.getFreeDrawTimes = function() {
+        return this.freeDrawTimes;
+      };
+      GameMgr.prototype.addFlipCounts = function(count) {
+        if (!this.isGameStarted()) return;
+        this.flipCounts += count;
+        this.flipCounts = Math.max(this.flipCounts, 0);
+        console.log("-----------------------------------flipCounts:", this.flipCounts);
+        this.flipCounts >= 21 && console.error("-----------------------------------flipCounts:", this.flipCounts);
+      };
+      GameMgr.prototype.getFlipCounts = function() {
+        return this.flipCounts;
+      };
+      GameMgr.prototype.addStep = function(node, lastParent, lastPos, func, scores, scorePos) {
         this.stepInfoArray.push({
           node: node,
           lastParent: lastParent,
           lastPos: lastPos,
-          func: func
+          func: func,
+          scores: scores,
+          scoresPos: scorePos
         });
+        EventManager_1.gEventMgr.emit(EventName_1.GlobalEvent.UPDATE_BACK_BTN_ICON);
       };
       GameMgr.prototype.getPlacePokerRoot = function() {
         return this.placePokerRoot;
@@ -804,6 +1090,7 @@ window.__require = function e(t, n, r) {
           return;
         }
         var step = this.stepInfoArray.pop();
+        EventManager_1.gEventMgr.emit(EventName_1.GlobalEvent.UPDATE_BACK_BTN_ICON);
         var count = 0;
         var _loop_1 = function() {
           count++;
@@ -811,8 +1098,11 @@ window.__require = function e(t, n, r) {
           var parent = step.lastParent.pop();
           var pos = step.lastPos.pop();
           var func = step.func ? step.func.pop() : null;
+          var score = step.scores && step.scores.length > 0 ? step.scores.pop() : 0;
+          var scorePos = step.scoresPos && step.scoresPos.length > 0 ? step.scoresPos.pop() : null;
+          scorePos ? exports.Game.addScore(score, scorePos) : exports.Game.addScore(score);
           if ("PokerClip" == parent.name || "PokerFlipRoot" == parent.name) {
-            var selfPos = parent.convertToNodeSpaceAR(node.getParent().convertToWorldSpaceAR(node.position));
+            var selfPos = CMath.ConvertToNodeSpaceAR(node, parent);
             node.setPosition(selfPos);
           } else node.setPosition(pos);
           if (func && func.callback && func.target) {
@@ -827,12 +1117,13 @@ window.__require = function e(t, n, r) {
             if (parent.getComponent(Poker_1.default)) if (parent.getComponent(Poker_1.default).isCycled()) {
               returnPos.x = 0;
               returnPos.y = 0;
-            } else returnPos.y = Pokers_1.OFFSET_Y; else if ("PokerFlipRoot" != parent.name) {
+            } else func && func.callback && func.callback == parent.getComponent(Poker_1.default).flipCard ? returnPos.y = Pokers_1.OFFSET_Y / 3 : returnPos.y = Pokers_1.OFFSET_Y; else if ("PokerFlipRoot" != parent.name) {
               returnPos.x = 0;
               returnPos.y = 0;
             }
             var action = cc.sequence(cc.delayTime(count / 500), cc.callFunc(function() {
               poker.node.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_REMOVE);
+              poker.node.stopActionByTag(Pokers_1.ACTION_TAG.FLIP_CARD_REPOS_ON_ADD);
             }, this_1), cc.moveTo(.1, returnPos.x, returnPos.y), cc.callFunc(function() {
               node.group = "default";
               poker.setDefaultPosition();
@@ -844,6 +1135,9 @@ window.__require = function e(t, n, r) {
         var this_1 = this;
         while (step.node.length > 0) _loop_1();
       };
+      GameMgr.prototype.canBackStep = function() {
+        return this.stepInfoArray.length > 0;
+      };
       return GameMgr;
     }();
     exports.Game = GameMgr.inst;
@@ -852,7 +1146,9 @@ window.__require = function e(t, n, r) {
   }, {
     "../Poker": "Poker",
     "../Pokers": "Pokers",
-    "../utils/HashMap": "HashMap"
+    "../utils/HashMap": "HashMap",
+    "./EventManager": "EventManager",
+    "./EventName": "EventName"
   } ],
   HashMap: [ function(require, module, exports) {
     "use strict";
@@ -981,8 +1277,10 @@ window.__require = function e(t, n, r) {
       };
       PokerRoot.prototype.start = function() {};
       PokerRoot.prototype.onChildRemove = function() {
-        console.warn(" PokerRoot update root node");
-        Game_1.Game.addPlacePokerRoot(parseInt(this.node.name), this.node);
+        if (Game_1.Game.isGameStarted()) {
+          console.warn(" PokerRoot update root node");
+          Game_1.Game.addPlacePokerRoot(parseInt(this.node.name), this.node);
+        }
       };
       PokerRoot.prototype.onAddChild = function(child) {
         var poker = child.getComponent(Poker_1.default);
@@ -1000,9 +1298,7 @@ window.__require = function e(t, n, r) {
           poker.setNormal();
         }
       };
-      PokerRoot.prototype.update = function(dt) {
-        null != Game_1.Game.getPlacePokerRoot().keyOf(this.node) ? this.node.color = cc.Color.RED : this.node.color = cc.Color.WHITE;
-      };
+      PokerRoot.prototype.update = function(dt) {};
       PokerRoot = __decorate([ ccclass ], PokerRoot);
       return PokerRoot;
     }(cc.Component);
@@ -1019,7 +1315,7 @@ window.__require = function e(t, n, r) {
       value: true
     });
     exports.Pokers = [ "spade_,1", "heart_,1", "club_,1", "diamond_,1", "spade_,2", "heart_,2", "club_,2", "diamond_,2", "spade_,3", "heart_,3", "club_,3", "diamond_,3", "spade_,4", "heart_,4", "club_,4", "diamond_,4", "spade_,5", "heart_,5", "club_,5", "diamond_,5", "spade_,6", "heart_,6", "club_,6", "diamond_,6", "spade_,7", "heart_,7", "club_,7", "diamond_,7", "spade_,8", "heart_,8", "club_,8", "diamond_,8", "spade_,9", "heart_,9", "club_,9", "diamond_,9", "spade_,10", "heart_,10", "club_,10", "diamond_,10", "spade_,11", "heart_,11", "club_,11", "diamond_,11", "spade_,12", "heart_,12", "club_,12", "diamond_,12", "spade_,13", "heart_,13", "club_,13", "diamond_,13" ];
-    exports.PokerIndex = [ 6, 5, 4, 3, 2, 1, 0, 12, 11, 10, 9, 8, 7, 17, 16, 15, 14, 13, 21, 20, 19, 18, 24, 23, 22, 26, 25, 27, 30, 33, 36, 39, 42, 45, 48, 51, 31, 34, 37, 40, 43, 46, 49, 50, 32, 35, 38, 41, 44, 47, 28, 29 ];
+    exports.PokerIndex = [ 6, 5, 4, 3, 2, 1, 0, 12, 11, 10, 9, 8, 7, 17, 16, 15, 14, 13, 21, 20, 19, 18, 24, 23, 22, 26, 25, 27, 28, 29, 50, 49, 46, 43, 40, 37, 34, 31, 30, 33, 36, 39, 42, 45, 48, 51 ];
     var ACTION_TAG;
     (function(ACTION_TAG) {
       ACTION_TAG[ACTION_TAG["FLIP_CARD_REPOS_ON_ADD"] = 0] = "FLIP_CARD_REPOS_ON_ADD";
@@ -1027,8 +1323,9 @@ window.__require = function e(t, n, r) {
       ACTION_TAG[ACTION_TAG["BACK_STEP"] = 2] = "BACK_STEP";
       ACTION_TAG[ACTION_TAG["DEV_POKER"] = 3] = "DEV_POKER";
       ACTION_TAG[ACTION_TAG["RE_DEV_POKER"] = 4] = "RE_DEV_POKER";
+      ACTION_TAG[ACTION_TAG["SHAKE"] = 5] = "SHAKE";
     })(ACTION_TAG = exports.ACTION_TAG || (exports.ACTION_TAG = {}));
-    exports.OFFSET_Y = -40;
+    exports.OFFSET_Y = -70;
     exports.OFFSET_X = 0;
     cc._RF.pop();
   }, {} ],
@@ -1041,6 +1338,8 @@ window.__require = function e(t, n, r) {
     var Game_1 = require("./controller/Game");
     var GameFactory_1 = require("./controller/GameFactory");
     var Pokers_1 = require("./Pokers");
+    var EventManager_1 = require("./controller/EventManager");
+    var EventName_1 = require("./controller/EventName");
     var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
     var CardState;
     (function(CardState) {
@@ -1075,7 +1374,7 @@ window.__require = function e(t, n, r) {
         _this.defualtChildCount = 0;
         _this.isCheck = false;
         _this.cycled = false;
-        _this.placeLimit = 75;
+        _this.placeLimit = 100;
         return _this;
       }
       Poker_1 = Poker;
@@ -1113,6 +1412,7 @@ window.__require = function e(t, n, r) {
       };
       Poker.prototype.unuse = function() {
         this.node.targetOff(this);
+        EventManager_1.gEventMgr.targetOff(this);
         this.cycled = false;
       };
       Poker.prototype.getNext = function() {
@@ -1138,12 +1438,14 @@ window.__require = function e(t, n, r) {
         return this.carState;
       };
       Poker.prototype.onLoad = function() {
+        this.node.getChildByName("Label").active = false;
         this.defualtChildCount = this.node.childrenCount;
         console.log(" default children count:", this.defualtChildCount);
         this.setCardState(CardState.Back);
         this.node["_onSetParent"] = this.onSetParent.bind(this);
       };
       Poker.prototype.initEvent = function() {
+        var _this = this;
         this.node.on(cc.Node.EventType.CHILD_ADDED, this.onAddChild, this);
         this.node.on(cc.Node.EventType.CHILD_REMOVED, this.onChildRemove, this);
         this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
@@ -1151,13 +1453,18 @@ window.__require = function e(t, n, r) {
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onMoveEnd, this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.onMoveEnd, this);
         this.node.on("check-done", this.onCheckDone, this);
+        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.REMOVE_POKER, function() {
+          _this.node.setParent(Game_1.Game.removeNode);
+          GameFactory_1.gFactory.putPoker(_this.node);
+          Game_1.Game.addRemovePokerCount(1);
+        }, this);
       };
       Poker.prototype.onCheckDone = function(key) {
         var _this = this;
         console.log(" check done: ", key, ":", this.key, this.value);
         if (this.key != key || !this.isCheck) return;
         this.scheduleOnce(function() {
-          var selfPos = Game_1.Game.removeNode.convertToNodeSpaceAR(_this.node.parent.convertToWorldSpaceAR(_this.node.position));
+          var selfPos = CMath.ConvertToNodeSpaceAR(_this.node, Game_1.Game.removeNode);
           _this.node.setParent(Game_1.Game.removeNode);
           _this.node.setPosition(selfPos);
           var dir = _this.value % 2 == 1 ? 1 : -1;
@@ -1199,25 +1506,21 @@ window.__require = function e(t, n, r) {
         console.log(this.value, this.frontCard.node.scaleX, this.frontCard.node.scaleY);
         console.log(this.node.scale);
         console.log(this.node.opacity, this.frontCard.node.opacity, this.frontCard.node.active);
-        console.log(this.frontCard.spriteFrame);
         e.bubbles = !this.isNormal();
+        if (Game_1.Game.isTimeOver()) return;
+        Game_1.Game.isGameStarted() || Game_1.Game.start();
       };
       Poker.prototype.checkAutoRecycle = function() {
         var _this = this;
-        if (this.cycled) return false;
+        if (this.cycled) {
+          console.log(" poker is recycled !!!");
+          return false;
+        }
         if (this.node.childrenCount > this.defualtChildCount) return false;
         var index = -1;
         Game_1.Game.getCycledPokerRoot().forEach(function(key, node) {
           var poker = node.getComponent(Poker_1);
-          if (poker) {
-            if (Poker_1.checkRecycled(poker, _this)) {
-              index = key;
-              return;
-            }
-          } else if (1 == _this.value) {
-            index = key;
-            return;
-          }
+          poker ? Poker_1.checkRecycled(poker, _this) && (index = key) : 1 == _this.value && (index = key);
         });
         if (index >= 0) {
           console.log(" auto place to recycled root:", index);
@@ -1227,6 +1530,7 @@ window.__require = function e(t, n, r) {
       };
       Poker.prototype.onMove = function(e) {
         e.bubbles = false;
+        if (Game_1.Game.isTimeOver()) return;
         if (!this.canMove) return;
         this.node.group = "top";
         var move = e.getDelta();
@@ -1240,6 +1544,7 @@ window.__require = function e(t, n, r) {
       Poker.prototype.onMoveEnd = function(e) {
         var _this = this;
         e.bubbles = false;
+        if (Game_1.Game.isTimeOver()) return;
         if (this.defaultPos && this.canMove) {
           var placeIndex = this.checkCanPlace();
           if (placeIndex >= 0) {
@@ -1252,7 +1557,10 @@ window.__require = function e(t, n, r) {
               console.log(" place to new Cycled Root:", recycleIndex);
               this.node.group = "default";
               this.placeToNewCycleNode(recycleIndex);
-            } else this.checkAutoRecycle() || this.node.runAction(cc.sequence(cc.moveTo(.1, this.defaultPos.x, this.defaultPos.y), cc.callFunc(function() {
+            } else if (!this.checkAutoRecycle()) if (CMath.Distance(this.node.position, this.defaultPos) < 5) {
+              this.node.setPosition(this.defaultPos);
+              this.next || this.shake();
+            } else this.node.runAction(cc.sequence(cc.moveTo(.1, this.defaultPos.x, this.defaultPos.y), cc.callFunc(function() {
               _this.node.group = "default";
             }, this)));
           }
@@ -1267,7 +1575,7 @@ window.__require = function e(t, n, r) {
           if (_this.node.name == root.name && poker) return;
           if (poker && poker.getKey() == _this.getKey()) return;
           if (poker && Poker_1.checkBeNext(poker, _this) || !poker && 13 == _this.value) {
-            var dis = CMath.Distance(_this.node.parent.convertToNodeSpaceAR(root.parent.convertToWorldSpaceAR(root.position)), _this.node.position);
+            var dis = CMath.Distance(CMath.ConvertToNodeSpaceAR(root, _this.node.parent), _this.node.position);
             if (dis < distance) {
               distance = dis;
               index = key;
@@ -1280,13 +1588,12 @@ window.__require = function e(t, n, r) {
         var _this = this;
         var distance = this.placeLimit;
         var index = -1;
-        if (this.cycled) return index;
         if (this.node.childrenCount > this.defualtChildCount) return index;
         Game_1.Game.getCycledPokerRoot().forEach(function(key, root) {
           var poker = root.getComponent(Poker_1);
           if (_this.node.name == root.name && poker) return;
           if (poker && Poker_1.checkRecycled(poker, _this) || !poker && 1 == _this.value) {
-            var dis = CMath.Distance(_this.node.parent.convertToNodeSpaceAR(root.parent.convertToWorldSpaceAR(root.position)), _this.node.position);
+            var dis = CMath.Distance(CMath.ConvertToNodeSpaceAR(root, _this.node.parent), _this.node.position);
             if (dis < distance) {
               distance = dis;
               index = key;
@@ -1313,12 +1620,21 @@ window.__require = function e(t, n, r) {
       Poker.prototype.placeToNewRoot = function(index) {
         var _this = this;
         var root = Game_1.Game.getPlacePokerRoot().get(index);
-        var selfPos = root.convertToNodeSpaceAR(this.node.parent.convertToWorldSpaceAR(this.node.position));
+        var selfPos = CMath.ConvertToNodeSpaceAR(this.node, root);
+        var score = 0;
+        this.isCycled() && (score = 10 * -(13 - this.value));
+        var socre2 = 0;
+        "PokerFlipRoot" == this.node.getParent().name && (socre2 = 20);
+        var scorePos = CMath.ConvertToNodeSpaceAR(this.node, Game_1.Game.removeNode);
+        Game_1.Game.addScore(score, scorePos);
+        Game_1.Game.addScore(socre2, CMath.ConvertToNodeSpaceAR(this.node.getParent(), Game_1.Game.removeNode));
         this.forward && this.forward.carState == CardState.Back ? Game_1.Game.addStep([ this.node ], [ this.forward.node ], [ this.node.position.clone() ], [ {
           callback: this.forward.flipCard,
-          args: [ .1 ],
+          args: [ .1, false, function() {
+            Game_1.Game.addFlipCounts(-1);
+          } ],
           target: this.forward
-        } ]) : Game_1.Game.addStep([ this.node ], [ this.node.getParent() ], [ this.node.position.clone() ]);
+        } ], [ -20 - score - socre2 ], [ scorePos ]) : Game_1.Game.addStep([ this.node ], [ this.node.getParent() ], [ this.node.position.clone() ], [], [ -score - socre2 ], [ scorePos ]);
         this.node.setParent(root);
         this.node.setPosition(selfPos);
         var offset = 0;
@@ -1332,21 +1648,35 @@ window.__require = function e(t, n, r) {
       };
       Poker.prototype.placeToNewCycleNode = function(index) {
         var _this = this;
-        this.setRecycle(true);
         var root = Game_1.Game.getCycledPokerRoot().get(index);
-        var selfPos = root.convertToNodeSpaceAR(this.node.parent.convertToWorldSpaceAR(this.node.position));
+        var selfPos = CMath.ConvertToNodeSpaceAR(this.node, root);
+        var score = 10 * (13 - this.value);
+        var socre2 = 0;
+        "PokerFlipRoot" == this.node.getParent().name && (socre2 = 20);
+        if (this.isCycled()) {
+          score = 0;
+          socre2 = 0;
+        }
+        var scorePos = CMath.ConvertToNodeSpaceAR(root, Game_1.Game.removeNode);
+        this.setRecycle(true);
+        Game_1.Game.addScore(score, scorePos);
+        Game_1.Game.addScore(socre2, CMath.ConvertToNodeSpaceAR(this.node, Game_1.Game.removeNode));
         this.forward && this.forward.carState == CardState.Back ? Game_1.Game.addStep([ this.node ], [ this.forward.node ], [ this.node.position.clone() ], [ {
           callback: this.forward.flipCard,
-          args: [ .1 ],
+          args: [ .1, false, function() {
+            Game_1.Game.addFlipCounts(-1);
+          } ],
           target: this.forward
-        } ]) : Game_1.Game.addStep([ this.node ], [ this.node.getParent() ], [ this.node.position.clone() ]);
+        } ], [ -20 - score - socre2 ], [ scorePos ]) : Game_1.Game.addStep([ this.node ], [ this.node.getParent() ], [ this.node.position.clone() ], [], [ -score - socre2 ], [ scorePos ]);
         this.node.setParent(root);
         this.node.setPosition(selfPos);
+        var distance = CMath.Distance(selfPos, cc.v2(0, 0));
+        var time = distance / 2500;
         this.setKey(null);
         this.setNext(null);
         Game_1.Game.addCycledPokerRoot(index, this.node);
         this.node.group = "top";
-        this.node.runAction(cc.sequence(cc.moveTo(.1, 0, 0), cc.callFunc(function() {
+        this.node.runAction(cc.sequence(cc.moveTo(time, 0, 0), cc.callFunc(function() {
           _this.node.group = "default";
           _this.setDefaultPosition();
         }, this)));
@@ -1361,6 +1691,14 @@ window.__require = function e(t, n, r) {
             Game_1.Game.clearStep();
           } else this.forward && this.forward.check.call(this.forward, valua + 1);
         } else this.isCheck = false;
+      };
+      Poker.prototype.shake = function() {
+        this.node.group = "default";
+        var pos = this.getDefaultPosition();
+        var shake = cc.sequence(cc.repeat(cc.sequence(cc.moveTo(.02, pos.x - 10, pos.y), cc.moveTo(.04, pos.x + 20, pos.y), cc.moveTo(.02, pos.x - 10, pos.y)), 5), cc.moveTo(.01, pos.x, pos.y));
+        shake.setTag(Pokers_1.ACTION_TAG.SHAKE);
+        this.node.stopActionByTag(Pokers_1.ACTION_TAG.SHAKE);
+        this.node.runAction(shake);
       };
       Poker.prototype.emitCheckDone = function() {
         this.node.emit("check-done", this.key);
@@ -1401,6 +1739,7 @@ window.__require = function e(t, n, r) {
       };
       Poker.prototype.onChildRemove = function(child) {
         console.log(" onChildRemove:", this.node.childrenCount, ", value:", this.value, ",key:", this.key, "cycled:", this.cycled);
+        if (!Game_1.Game.isGameStarted()) return;
         this.setNext(null);
         if (this.cycled) {
           console.log(" onChildRemove cycled ------------");
@@ -1414,7 +1753,11 @@ window.__require = function e(t, n, r) {
           console.warn("onChildRemove update poker root:", this.key, ",value:", this.value);
           Game_1.Game.addPlacePokerRoot(this.key, this.node);
           this.setNormal();
-          this.carState == CardState.Back ? this.flipCard(.1) : this.forward && this.forward.updateState.call(this.forward);
+          if (this.carState == CardState.Back) {
+            this.flipCard(.1);
+            Game_1.Game.addFlipCounts(1);
+            Game_1.Game.addScore(20, CMath.ConvertToNodeSpaceAR(this.node, Game_1.Game.removeNode));
+          } else this.forward && this.forward.updateState.call(this.forward);
         }
       };
       Poker.prototype.updateState = function() {
@@ -1437,7 +1780,7 @@ window.__require = function e(t, n, r) {
         }
       };
       Poker.prototype.setNormal = function() {
-        console.log("setNormal:", this.value, ",key:", this.key);
+        console.log("setNormal:", this.value, ", setNormal key:", this.key);
         this.frontCard.node.color = cc.Color.WHITE;
         this.canMove = this.carState == CardState.Front;
       };
@@ -1495,9 +1838,7 @@ window.__require = function e(t, n, r) {
         }
       };
       Poker.prototype.start = function() {};
-      Poker.prototype.update = function(dt) {
-        null != Game_1.Game.getPlacePokerRoot().keyOf(this.node) ? this.frontCard.node.color = this.canMove ? cc.Color.ORANGE : cc.Color.RED : null == Game_1.Game.getCycledPokerRoot().keyOf(this.node) && (this.frontCard.node.color = this.canMove ? cc.Color.WHITE : cc.Color.GRAY);
-      };
+      Poker.prototype.update = function(dt) {};
       Poker.prototype.onSetParent = function(parent) {
         if (!parent) {
           this.setForward(null);
@@ -1523,6 +1864,8 @@ window.__require = function e(t, n, r) {
     cc._RF.pop();
   }, {
     "./Pokers": "Pokers",
+    "./controller/EventManager": "EventManager",
+    "./controller/EventName": "EventName",
     "./controller/Game": "Game",
     "./controller/GameFactory": "GameFactory"
   } ],
@@ -1551,17 +1894,10 @@ window.__require = function e(t, n, r) {
         Game_1.Game.addCycledPokerRoot(parseInt(this.node.name), child);
       };
       RecycleRoot.prototype.onChildRemove = function(child) {
-        var poker = child.getComponent(Poker_1.default);
-        poker && poker.setRecycle(false);
         Game_1.Game.addCycledPokerRoot(parseInt(this.node.name), this.node);
       };
       RecycleRoot.prototype.start = function() {};
-      RecycleRoot.prototype.update = function(dt) {
-        Game_1.Game.getCycledPokerRoot().forEach(function(key, node) {
-          var poker = node.getComponent(Poker_1.default);
-          poker ? poker.frontCard.node.color = cc.Color.YELLOW : node.color = cc.Color.YELLOW;
-        });
-      };
+      RecycleRoot.prototype.update = function(dt) {};
       RecycleRoot = __decorate([ ccclass ], RecycleRoot);
       return RecycleRoot;
     }(cc.Component);
@@ -1569,6 +1905,180 @@ window.__require = function e(t, n, r) {
     cc._RF.pop();
   }, {
     "./Poker": "Poker",
+    "./controller/Game": "Game"
+  } ],
+  Result: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "3d3e694EHtE55kWvZJIadml", "Result");
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var Game_1 = require("./controller/Game");
+    var EventManager_1 = require("./controller/EventManager");
+    var EventName_1 = require("./controller/EventName");
+    var celerx = require("./utils/celerx");
+    var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
+    var Result = function(_super) {
+      __extends(Result, _super);
+      function Result() {
+        var _this = null !== _super && _super.apply(this, arguments) || this;
+        _this.Score = null;
+        _this.TimeBonus = null;
+        _this.FinalScore = null;
+        _this.ConfirmButton = null;
+        _this.Title = null;
+        _this.TitleAtlas = null;
+        _this.Result = null;
+        _this.Light = null;
+        _this.score = 0;
+        _this.timeBonus = 0;
+        _this.finalScore = 0;
+        _this.scoreStep = 0;
+        _this.timeBonusStep = 0;
+        _this.finalScoreStep = 0;
+        _this.showScore = 0;
+        return _this;
+      }
+      Result.prototype.onLoad = function() {
+        var _this = this;
+        this.Light.active = false;
+        this.Score.string = "0";
+        this.TimeBonus.string = "0";
+        this.FinalScore.string = "0";
+        Game_1.Game.getGameTime() > 0 ? this.Title.spriteFrame = this.TitleAtlas.getSpriteFrame("bg_font03") : this.Title.spriteFrame = this.TitleAtlas.getSpriteFrame("bg_font02");
+        this.Result.setEventListener(this.eventListener.bind(this));
+        this.showScore = Math.max(0, Game_1.Game.getScore() - Game_1.Game.getTimeBonus());
+        this.scoreStep = this.showScore / 30;
+        this.timeBonusStep = Game_1.Game.getTimeBonus() / 30;
+        this.finalScoreStep = Game_1.Game.getScore() / 30;
+        false;
+        this.ConfirmButton.node.on(cc.Node.EventType.TOUCH_END, function() {
+          true;
+          window.location.reload();
+        }, this);
+        EventManager_1.gEventMgr.on(EventName_1.GlobalEvent.RESTART, function() {
+          _this.node.removeFromParent();
+        }, this);
+      };
+      Result.prototype.eventListener = function(trackEntry, event) {
+        switch (event.stringValue) {
+         case "light":
+          this.Light.active = true;
+          this.Light.runAction(cc.repeatForever(cc.rotateBy(5, 360)));
+        }
+      };
+      Result.prototype.start = function() {};
+      Result.prototype.update = function(dt) {
+        if (this.score < this.showScore) {
+          this.score += this.scoreStep;
+          this.score = Math.min(this.score, this.showScore);
+          this.Score.string = this.score.toString();
+        }
+        if (this.timeBonus < Game_1.Game.getTimeBonus()) {
+          this.timeBonus += this.timeBonusStep;
+          this.timeBonus = Math.min(this.timeBonus, Game_1.Game.getTimeBonus());
+          this.TimeBonus.string = this.timeBonus.toString();
+        }
+        if (this.finalScore < Game_1.Game.getScore()) {
+          this.finalScore += this.finalScoreStep;
+          this.finalScore = Math.min(this.finalScore, Game_1.Game.getScore());
+          this.FinalScore.string = this.finalScore.toString();
+        }
+      };
+      __decorate([ property(cc.Label) ], Result.prototype, "Score", void 0);
+      __decorate([ property(cc.Label) ], Result.prototype, "TimeBonus", void 0);
+      __decorate([ property(cc.Label) ], Result.prototype, "FinalScore", void 0);
+      __decorate([ property(cc.Button) ], Result.prototype, "ConfirmButton", void 0);
+      __decorate([ property(cc.Sprite) ], Result.prototype, "Title", void 0);
+      __decorate([ property(cc.SpriteAtlas) ], Result.prototype, "TitleAtlas", void 0);
+      __decorate([ property(sp.Skeleton) ], Result.prototype, "Result", void 0);
+      __decorate([ property(cc.Node) ], Result.prototype, "Light", void 0);
+      Result = __decorate([ ccclass ], Result);
+      return Result;
+    }(cc.Component);
+    exports.default = Result;
+    cc._RF.pop();
+  }, {
+    "./controller/EventManager": "EventManager",
+    "./controller/EventName": "EventName",
+    "./controller/Game": "Game",
+    "./utils/celerx": "celerx"
+  } ],
+  ScoreLabel: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "63782W3hqJOj5tpO+PG+bef", "ScoreLabel");
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
+    var ScoreLabel = function(_super) {
+      __extends(ScoreLabel, _super);
+      function ScoreLabel() {
+        var _this = null !== _super && _super.apply(this, arguments) || this;
+        _this.Score = null;
+        return _this;
+      }
+      ScoreLabel.prototype.reuse = function() {
+        this.node.scale = 0;
+        this.Score.string = arguments[0][0];
+      };
+      ScoreLabel.prototype.unuse = function() {};
+      ScoreLabel.prototype.onLoad = function() {};
+      ScoreLabel.prototype.start = function() {};
+      __decorate([ property(cc.Label) ], ScoreLabel.prototype, "Score", void 0);
+      ScoreLabel = __decorate([ ccclass ], ScoreLabel);
+      return ScoreLabel;
+    }(cc.Component);
+    exports.default = ScoreLabel;
+    cc._RF.pop();
+  }, {} ],
+  Stop: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "8765cbDuHdBm6FKOUQ5ug79", "Stop");
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var Game_1 = require("./controller/Game");
+    var EventManager_1 = require("./controller/EventManager");
+    var EventName_1 = require("./controller/EventName");
+    var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
+    var Stop = function(_super) {
+      __extends(Stop, _super);
+      function Stop() {
+        var _this = null !== _super && _super.apply(this, arguments) || this;
+        _this.EndButton = null;
+        _this.ResumeButton = null;
+        _this.Help = null;
+        _this.Content = null;
+        return _this;
+      }
+      Stop.prototype.onLoad = function() {
+        this.EndButton.node.on(cc.Node.EventType.TOUCH_END, this.endNow, this);
+        this.ResumeButton.node.on(cc.Node.EventType.TOUCH_END, this.Resume, this);
+        this.Help.node.on(cc.Node.EventType.TOUCH_END, this.ShowHelp, this);
+      };
+      Stop.prototype.endNow = function() {
+        Game_1.Game.calTimeBonus();
+        EventManager_1.gEventMgr.emit(EventName_1.GlobalEvent.OPEN_RESULT);
+      };
+      Stop.prototype.ShowHelp = function() {};
+      Stop.prototype.Resume = function() {
+        this.node.active = false;
+        Game_1.Game.setPause(false);
+      };
+      Stop.prototype.start = function() {};
+      __decorate([ property(cc.Button) ], Stop.prototype, "EndButton", void 0);
+      __decorate([ property(cc.Button) ], Stop.prototype, "ResumeButton", void 0);
+      __decorate([ property(cc.Button) ], Stop.prototype, "Help", void 0);
+      __decorate([ property(cc.Label) ], Stop.prototype, "Content", void 0);
+      Stop = __decorate([ ccclass ], Stop);
+      return Stop;
+    }(cc.Component);
+    exports.default = Stop;
+    cc._RF.pop();
+  }, {
+    "./controller/EventManager": "EventManager",
+    "./controller/EventName": "EventName",
     "./controller/Game": "Game"
   } ],
   celerx: [ function(require, module, exports) {
@@ -1600,14 +2110,14 @@ window.__require = function e(t, n, r) {
       return t;
     }
     function base64_decode(e) {
-      var t, r, n, i, a, o, d, s = new Array(), c = 0, l = e;
-      if (e = e.replace(/[^A-Za-z0-9\+\/\=]/g, ""), l != e && alert("Warning! Characters outside Base64 range in input string ignored."), 
+      var t, r, n, i, a, o, d, s = new Array(), c = 0, u = e;
+      if (e = e.replace(/[^A-Za-z0-9\+\/\=]/g, ""), u != e && alert("Warning! Characters outside Base64 range in input string ignored."), 
       e.length % 4) return alert("Error: Input length is not a multiple of 4 bytes."), 
       "";
-      for (var u = 0; c < e.length; ) i = keyStr.indexOf(e.charAt(c++)), a = keyStr.indexOf(e.charAt(c++)), 
+      for (var l = 0; c < e.length; ) i = keyStr.indexOf(e.charAt(c++)), a = keyStr.indexOf(e.charAt(c++)), 
       o = keyStr.indexOf(e.charAt(c++)), d = keyStr.indexOf(e.charAt(c++)), t = i << 2 | a >> 4, 
-      r = (15 & a) << 4 | o >> 2, n = (3 & o) << 6 | d, s[u++] = t, 64 != o && (s[u++] = r), 
-      64 != d && (s[u++] = n);
+      r = (15 & a) << 4 | o >> 2, n = (3 & o) << 6 | d, s[l++] = t, 64 != o && (s[l++] = r), 
+      64 != d && (s[l++] = n);
       return s;
     }
     var _typeof = "function" == typeof Symbol && "symbol" == _typeof2(Symbol.iterator) ? function(e) {
@@ -1752,8 +2262,11 @@ window.__require = function e(t, n, r) {
       },
       onStart: function onStart(e) {
         return bridge.register("onStart", e);
+      },
+      provideScore: function provideScore(e) {
+        return bridge.register("provideScore", e);
       }
     };
     cc._RF.pop();
   }, {} ]
-}, {}, [ "GameScene", "Poker", "PokerRoot", "Pokers", "RecycleRoot", "AudioController", "EventManager", "EventName", "Game", "GameFactory", "HashMap", "celerx" ]);
+}, {}, [ "GameScene", "Poker", "PokerRoot", "Pokers", "RecycleRoot", "Result", "ScoreLabel", "Stop", "AudioController", "EventManager", "EventName", "Game", "GameFactory", "HashMap", "celerx" ]);
