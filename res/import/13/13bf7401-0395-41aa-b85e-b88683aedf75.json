@@ -1,21 +1,21 @@
 {
   "__type__": "cc.SpriteFrame",
   "content": {
-    "name": "title",
-    "texture": "7ch3cSO51Ac78xBLXJ1Bli",
+    "name": "icon_time",
+    "texture": "fd7InYXAtNupF/QmP78qTI",
     "rect": [
-      11,
       0,
-      701,
-      246
+      0,
+      126,
+      63
     ],
     "offset": [
       0,
       0
     ],
     "originalSize": [
-      723,
-      246
+      126,
+      63
     ],
     "capInsets": [
       0,

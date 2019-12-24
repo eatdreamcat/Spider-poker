@@ -555,17 +555,17 @@
       },
       "_contentSize": {
         "__type__": "cc.Size",
-        "width": 893,
-        "height": 560
+        "width": 156.69,
+        "height": 275
       },
       "_position": {
         "__type__": "cc.Vec3",
-        "y": 613
+        "y": 573
       },
       "_scale": {
         "__type__": "cc.Vec3",
-        "x": 1,
-        "y": 1,
+        "x": 1.2,
+        "y": 1.2,
         "z": 1
       }
     },
@@ -591,7 +591,7 @@
       },
       "_playTimes": 1,
       "_N$skeletonData": {
-        "__uuid__": "bcRtcmLjdLxKQ5jj1AQZVa"
+        "__uuid__": "6bddZT8AJPpJ2a2KWhYaj0"
       }
     },
     {
@@ -641,8 +641,8 @@
       },
       "_contentSize": {
         "__type__": "cc.Size",
-        "width": 898,
-        "height": 642
+        "width": 987,
+        "height": 702
       },
       "_position": {
         "__type__": "cc.Vec3",
@@ -686,7 +686,7 @@
       "_contentSize": {
         "__type__": "cc.Size",
         "width": 724,
-        "height": 252
+        "height": 254
       },
       "_position": {
         "__type__": "cc.Vec3",
@@ -887,12 +887,12 @@
       },
       "_contentSize": {
         "__type__": "cc.Size",
-        "width": 660,
-        "height": 81
+        "width": 723,
+        "height": 82
       },
       "_position": {
         "__type__": "cc.Vec3",
-        "y": 360
+        "y": 419
       },
       "_scale": {
         "__type__": "cc.Vec3",
@@ -989,8 +989,8 @@
       },
       "_contentSize": {
         "__type__": "cc.Size",
-        "width": 442,
-        "height": 146
+        "width": 471,
+        "height": 151
       },
       "_scale": {
         "__type__": "cc.Vec3",
@@ -1062,16 +1062,16 @@
       "rect": [
         0,
         0,
-        660,
-        81
+        723,
+        82
       ],
       "offset": [
         0,
         0
       ],
       "originalSize": [
-        660,
-        81
+        723,
+        82
       ],
       "capInsets": [
         0,
@@ -1090,11 +1090,11 @@
         87,
         114,
         724,
-        252
+        254
       ],
       "offset": [
         0,
-        81
+        80
       ],
       "originalSize": [
         898,
@@ -1143,16 +1143,16 @@
       "rect": [
         0,
         0,
-        898,
-        642
+        987,
+        702
       ],
       "offset": [
         0,
         0
       ],
       "originalSize": [
-        898,
-        642
+        987,
+        702
       ],
       "capInsets": [
         0,
@@ -1224,16 +1224,16 @@
       "rect": [
         0,
         0,
-        442,
-        146
+        471,
+        151
       ],
       "offset": [
         0,
         0
       ],
       "originalSize": [
-        442,
-        146
+        471,
+        151
       ],
       "capInsets": [
         0,

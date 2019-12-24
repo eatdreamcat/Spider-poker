@@ -5,18 +5,18 @@
       "name": "bg_font02",
       "texture": "7ch3cSO51Ac78xBLXJ1Bli",
       "rect": [
-        660,
         0,
-        660,
-        81
+        82,
+        723,
+        82
       ],
       "offset": [
         0,
         0
       ],
       "originalSize": [
-        660,
-        81
+        723,
+        82
       ],
       "capInsets": [
         0,
@@ -49,16 +49,16 @@
       "rect": [
         0,
         0,
-        660,
-        81
+        723,
+        82
       ],
       "offset": [
         0,
         0
       ],
       "originalSize": [
-        660,
-        81
+        723,
+        82
       ],
       "capInsets": [
         0,
@@ -74,18 +74,18 @@
       "name": "bg_font03",
       "texture": "7ch3cSO51Ac78xBLXJ1Bli",
       "rect": [
-        1320,
         0,
-        660,
-        81
+        164,
+        723,
+        82
       ],
       "offset": [
         0,
         0
       ],
       "originalSize": [
-        660,
-        81
+        723,
+        82
       ],
       "capInsets": [
         0,
