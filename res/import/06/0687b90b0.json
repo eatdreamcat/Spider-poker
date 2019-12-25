@@ -1060,18 +1060,18 @@
       "name": "bg_font01",
       "texture": "7ch3cSO51Ac78xBLXJ1Bli",
       "rect": [
+        792,
         0,
-        0,
-        723,
-        82
+        660,
+        81
       ],
       "offset": [
         0,
         0
       ],
       "originalSize": [
-        723,
-        82
+        660,
+        81
       ],
       "capInsets": [
         0,

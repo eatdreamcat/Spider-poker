@@ -4,18 +4,18 @@
     "name": "title",
     "texture": "7ch3cSO51Ac78xBLXJ1Bli",
     "rect": [
-      11,
+      1,
       0,
-      701,
-      246
+      1401,
+      157
     ],
     "offset": [
-      0,
-      0
+      -24.5,
+      3
     ],
     "originalSize": [
-      723,
-      246
+      1452,
+      163
     ],
     "capInsets": [
       0,
